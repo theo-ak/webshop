@@ -4,6 +4,10 @@ require_once 'common.php';
 
 $items = selectAll($connection, 'products');
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['cart'][] = $_POST['id'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +16,6 @@ $items = selectAll($connection, 'products');
 <head>
     <meta charset="utf-8">
     <title>Music Shop</title>
-    <!-- JavaScript Bundle with Popper -->
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
@@ -38,14 +41,13 @@ $items = selectAll($connection, 'products');
                     <td><?= $item['description']; ?></td>
                     <td><?= $item['price']; ?></td>
                     <td>
-                        <form action="">
+                        <form method="post" action="index.php">
                             <input type="hidden" name="id" value="<?= $item['id']; ?>">
                             <input type="submit" value="Add" class="btn btn-primary">
                         </form>
                     </td>
                 </tr>
             <?php endif; ?>
-
         <?php endforeach; ?>
         </tbody>
     </table>

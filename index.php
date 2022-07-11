@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Music Shop</title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><?= $item['title']; ?></td>
                     <td><?= $item['description']; ?></td>
                     <td><?= $item['price']; ?></td>
+                    <td><img src="<?= $item['img']; ?>"></td>
                     <td>
                         <form method="post" action="index.php">
                             <input type="hidden" name="id" value="<?= $item['id']; ?>">

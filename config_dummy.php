@@ -1,5 +1,11 @@
 <?php
 
+session_start();
+
+if (!$_SESSION['cart']) {
+    $_SESSION['cart'] = [];
+}
+
 define('SERVER', '{servername}');
 define('USERNAME', '{username}');
 define('PASSWORD', '{password}');

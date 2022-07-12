@@ -10,12 +10,6 @@ try {
     echo 'Connection failed: ' . $err->getMessage();
 }
 
-function dd($var) {
-    echo "<pre>";
-    var_dump($var);
-    echo "</pre>";
-}
-
 function selectAll($connection, $table) {
     $sql = "SELECT * FROM $table";
     $query = $connection->prepare($sql);

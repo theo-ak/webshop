@@ -54,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </tbody>
     </table>
 
+   <a href="cart.php "> <button type="button" class="btn btn-primary">Go to cart</button></a>
+
 </body>
 
 </html>

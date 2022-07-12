@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><?= $item['title']; ?></td>
                     <td><?= $item['description']; ?></td>
                     <td><?= $item['price']; ?></td>
-                    <td><img src="<?= $item['img']; ?>"></td>
+                    <td><div class="img"><img src="<?= $item['img']; ?>"></div></td>
                     <td>
                         <form method="post" action="index.php">
                             <input type="hidden" name="id" value="<?= $item['id']; ?>">

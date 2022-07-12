@@ -4,6 +4,10 @@ img {
     background-color: dimgray;
 }
 
+#login {
+    margin-top: 20px;
+}
+
 #details-form {
     width: 500px;
     margin: 30px;

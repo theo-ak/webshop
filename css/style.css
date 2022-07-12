@@ -12,3 +12,12 @@ img {
     width: 500px;
     margin: 30px;
 }
+
+#add-product-btn {
+    margin: 20px;
+}
+
+#edit,
+#delete {
+    margin-top: 10px;
+}

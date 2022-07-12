@@ -17,10 +17,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contact = isset($_POST['contact']) ? test_input($_POST['contact']) : "";
     $comments = isset($_POST['comments']) ? test_input($_POST['comments']) : "";
 
-    $nameErr = $name ? "" : "Name is required";
-    $contactErr = $contact ? "" : "Contact is required";
-    $commentsErr = $comments ? "" : "Comments are required";
+    if ($name && $contact && $comments) {
+        $to = MANAGER;
+
+        $subject = "New Order";
+
+        $message = '<p>Name: ' . $name . '</p>' .
+            '<p>Contact: ' . $contact . '</p>' .
+            '<p>Comments: ' . $comments . '</p>';
+
+        foreach ($items as $item) {
+            if(in_array($item['id'], $_SESSION['cart'])) {
+                $message = $message . '<p>' . $item['title'] .
+                    '<br>' . $item['description'] .
+                    '<br>' . $item['price'] .
+                    '<br>' . '<img src="' . $item['img'] . '">' . '</p>';
+            }
+        }
+
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+        $headers[] = 'From: <dummy_email@provider.eu>';
+
+        mail($to, $subject, $message, implode("\r\n", $headers));
+    }
 }
+
 
 ?>
 
@@ -72,18 +95,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="post" id="details-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>">
-            <span class="error">* <?= $nameErr;?></span>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>" required>
         </div>
         <div class="form-group">
             <label for="contact">Contact details</label>
-            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details" value="<?= $contact ?>">
-            <span class="error">* <?= $contactErr;?></span>
+            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details" value="<?= $contact ?>" required>
         </div>
         <div class="form-group">
             <label for="comments">Comments</label>
-            <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments" value="<?= $comments ?>">
-            <span class="error">* <?= $commentsErr;?></span>
+            <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments" value="<?= $comments ?>" required>
         </div>
         <button type="submit" class="btn btn-primary">Checkout</button>
     </form>

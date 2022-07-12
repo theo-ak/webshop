@@ -1,5 +1,10 @@
-.img {
+img {
     width: 200px;
     height: 200px;
     background-color: dimgray;
+}
+
+#details-form {
+    width: 500px;
+    margin: 30px;
 }

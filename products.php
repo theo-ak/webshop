@@ -40,10 +40,7 @@ $items = selectAll($connection, 'products');
                 <td><?= $item['price']; ?></td>
                 <td><div class="image"><img src="<?= $item['img']; ?>"></div></td>
                 <td>
-                    <form method="post" action="product.php">
-                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <input type="submit" value="Edit" class="btn btn-primary" id="edit">
-                    </form>
+                    <a href="product.php?id=<?= $item['id'] ?>"><button class="btn btn-primary" id="edit">Edit</button></a>
 
                     <form method="post" action="products.php">
                         <input type="hidden" name="id" value="<?= $item['id']; ?>">

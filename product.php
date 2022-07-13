@@ -2,6 +2,12 @@
 
 require_once 'common.php';
 
+require_once 'common.php';
+
+if (!$_SESSION['admin_logged_in']) {
+    header('Location: login.php');
+}
+
 $title = $description = $price = null;
 
 $id = isset($_GET['id']) ? $_GET['id'] : '';

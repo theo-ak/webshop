@@ -2,17 +2,15 @@
 
 require_once 'common.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['admin_logged_in'] = false;
+$_SESSION['admin_logged_in'] = false;
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = isset($_POST['username']) ? test_input($_POST['username']) : "";
     $password = isset($_POST['password']) ? test_input($_POST['password']) : "";
 
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
         $_SESSION['admin_logged_in'] = true;
         header('Location: products.php');
-    } else {
-        $_SESSION['admin_logged_in'] = false;
     }
 }
 

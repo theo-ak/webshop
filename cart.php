@@ -18,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comments = isset($_POST['comments']) ? test_input($_POST['comments']) : "";
 
     if ($name && $contact && $comments) {
+        $date = date("Y-m-d h:i:s");
+        $item_ids = '';
+
         $to = MANAGER;
 
         $subject = "New Order";
@@ -28,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($items as $item) {
             if(in_array($item['id'], $_SESSION['cart'])) {
+                $item_ids = $item_ids . ' ' . $item['id'];
                 $message = $message . '<p>' . $item['title'] .
                     '<br>' . $item['description'] .
                     '<br>' . $item['price'] .
@@ -41,6 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $headers[] = 'From: <dummy_email@provider.eu>';
 
         mail($to, $subject, $message, implode("\r\n", $headers));
+
+        $sql = 'INSERT INTO orders (date, details, order_items, comments) VALUES (:date, :details, :order_items, :comments)';
+        $query = $connection->prepare($sql);
+        $query->execute([
+            'date' => $date,
+            'details' => $contact,
+            'order_items' => $item_ids,
+            'comments' => $comments
+        ]);
     }
 }
 

@@ -4,6 +4,20 @@ require_once 'common.php';
 
 $items = selectAll($connection, 'products');
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $id = (int)test_input($_POST['id']);
+
+    if ($id) {
+        $sql = 'DELETE FROM products WHERE id=:id';
+        $query = $connection->prepare($sql);
+        $query->execute([
+                'id' => $id
+        ]);
+
+        header('Location: products.php');
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -42,13 +56,14 @@ $items = selectAll($connection, 'products');
                 <td>
                     <a href="product.php?id=<?= $item['id'] ?>"><button class="btn btn-primary" id="edit">Edit</button></a>
 
-                    <form method="post" action="products.php">
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                         <input type="hidden" name="id" value="<?= $item['id']; ?>">
                         <input type="submit" value="Delete" class="btn btn-primary" id="delete">
                     </form>
                 </td>
             </tr>
         <?php endforeach; ?>
+
         </tbody>
     </table>
 

@@ -4,7 +4,25 @@ require_once 'common.php';
 
 $title = $description = $price = null;
 
+$id = isset($_GET['id']) ? $_GET['id'] : '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id) {
+    $sql = 'SELECT * FROM products WHERE id=:id';
+    $query = $connection->prepare($sql);
+    $query->execute([
+        'id' => $id
+    ]);
+
+    $item = $query->fetch();
+
+    $title = $item['title'];
+    $description = $item['description'];
+    $price = $item['price'];
+    $image = $item['img'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = isset($_POST['id']) ? test_input($_POST['id']) : "";
     $title = isset($_POST['title']) ? test_input($_POST['title']) : "";
     $description = isset($_POST['description']) ? test_input($_POST['description']) : "";
     $price = isset($_POST['price']) ? (float)test_input($_POST['price']) : "";
@@ -15,13 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($img, PATHINFO_EXTENSION));
 
-        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-        if ($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
-            $uploadOk = 1;
-        } else {
-            echo "File is not an image.";
-            $uploadOk = 0;
+        if (isset($_POST["submit"])) {
+            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+            if ($check !== false) {
+                echo "File is an image - " . $check["mime"] . ".";
+                $uploadOk = 1;
+            } else {
+                echo "File is not an image.";
+                $uploadOk = 0;
+            }
         }
 
         if ($uploadOk == 0) {
@@ -35,7 +55,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($title && $description && $price && $img) {
+    if ($id) {
+        if ($title && $description && $price && $img) {
+            $sql = 'UPDATE products SET title = :title, description = :description, price = :price, img = :img 
+                    WHERE id = :id';
+            $query = $connection->prepare($sql);
+            $query->execute([
+                'title' => $title,
+                'description' => $description,
+                'price' => $price,
+                'img' => $img,
+                'id' => $id
+            ]);
+
+            header("Location: product.php?id=$id");
+        }
+    } else {
         $sql = 'INSERT INTO products (title, description, price, img) VALUES (:title, :description, :price, :img)';
         $query = $connection->prepare($sql);
         $query->execute([
@@ -44,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'price' => $price,
             'img' => $img
         ]);
+
+        header('Location: products.php');
     }
 }
 
@@ -84,11 +121,21 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
     <div class="form-group">
         Select image to upload:
         <input type="file" name="fileToUpload" id="fileToUpload" required>
+        <input type="hidden" name="id" value="<?= $id ?>">
+
+        <?php
+        if (isset($image)): ?>
+            <p>Current image:</p>
+            <img src="<?= $image ?>" alt="no image">
+        <?php
+        endif; ?>
     </div>
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary" id="save">Save</button>
-        <a href="products.php"><button class="btn btn-primary" type="button">Back to products page</button></a>
+        <a href="products.php">
+            <button class="btn btn-primary" type="button">Back to products page</button>
+        </a>
     </div>
 
 </form>

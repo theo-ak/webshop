@@ -4,6 +4,10 @@ img {
     background-color: dimgray;
 }
 
+.form-group {
+    margin-top: 15px;
+}
+
 #login {
     margin-top: 20px;
 }

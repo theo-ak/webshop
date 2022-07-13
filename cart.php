@@ -46,14 +46,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         mail($to, $subject, $message, implode("\r\n", $headers));
 
-        $sql = 'INSERT INTO orders (date, details, order_items, comments) VALUES (:date, :details, :order_items, :comments)';
+        $sql = 'INSERT INTO orders (date, details, comments) VALUES (:date, :details, :comments)';
         $query = $connection->prepare($sql);
         $query->execute([
             'date' => $date,
             'details' => $contact,
-            'order_items' => $item_ids,
             'comments' => $comments
         ]);
+
+        $items_arr = explode(' ', $item_ids);
+        $items_arr = array_filter($items_arr);
+
+        $sql = 'SELECT MAX(id) FROM orders';
+        $query = $connection->prepare($sql);
+        $query->execute();
+
+        $order_arr = $query->fetch();
+        $order_id = $order_arr[0];
+
+        foreach ($items_arr as $item) {
+            $sql = 'INSERT INTO order_items (order_id, product_id) VALUES (:order_id, :product_id)';
+            $query = $connection->prepare($sql);
+            $query->execute([
+                'order_id' => (int)$order_id,
+                'product_id' => (int)$item
+            ]);
+        }
     }
 }
 

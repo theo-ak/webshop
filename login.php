@@ -8,9 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = isset($_POST['username']) ? test_input($_POST['username']) : "";
     $password = isset($_POST['password']) ? test_input($_POST['password']) : "";
 
+
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
         $_SESSION['admin_logged_in'] = true;
-        header('Location: products.php');
+
+        if(isset($_SESSION['rdrurl']))
+            header('location: '.$_SESSION['rdrurl']);
+        else
+            header('location: products.php');
     }
 }
 

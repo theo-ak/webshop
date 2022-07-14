@@ -2,6 +2,8 @@
 
 require_once 'common.php';
 
+$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
+
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }

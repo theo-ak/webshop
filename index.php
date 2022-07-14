@@ -2,7 +2,12 @@
 
 require_once 'common.php';
 
-$items = selectAll($connection, 'products');
+$cart_str = implode(',', $_SESSION['cart']);
+
+$sql = "SELECT * FROM products WHERE id NOT IN ($cart_str)";
+$query = $connection->prepare($sql);
+$query->execute();
+$items = $query->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($_POST['id'], $_SESSION['cart'])) {
@@ -47,25 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php
     foreach ($items as $item): ?>
-        <?php
-        if (!in_array($item['id'], $_SESSION['cart'])): ?>
-            <tr>
-                <th scope="row"><?= $item['id']; ?></th>
-                <td><?= $item['title']; ?></td>
-                <td><?= $item['description']; ?></td>
-                <td><?= $item['price']; ?></td>
-                <td>
-                    <div class="image"><img src="<?= $item['img']; ?>"></div>
-                </td>
-                <td>
-                    <form method="post" action="index.php">
-                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </form>
-                </td>
-            </tr>
-        <?php
-        endif; ?>
+        <tr>
+            <th scope="row"><?= $item['id']; ?></th>
+            <td><?= $item['title']; ?></td>
+            <td><?= $item['description']; ?></td>
+            <td><?= $item['price']; ?></td>
+            <td>
+                <div class="image"><img src="<?= $item['img']; ?>"></div>
+            </td>
+            <td>
+                <form method="post" action="index.php">
+                    <input type="hidden" name="id" value="<?= $item['id']; ?>">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </td>
+        </tr>
     <?php
     endforeach; ?>
     </tbody>

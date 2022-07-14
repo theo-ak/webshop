@@ -11,7 +11,7 @@ try {
         PASSWORD
     );
 } catch (PDOException $err) {
-    echo 'Connection failed: ' . $err->getMessage();
+    exit;
 }
 
 function selectAll($connection, $table)

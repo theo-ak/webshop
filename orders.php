@@ -28,6 +28,14 @@ $order_items = selectAll($connection, 'order_items');
 
 <body>
 
+<a href="products.php">
+    <button type="button" class="btn btn-primary mx-2 my-2">Products Page</button>
+</a>
+
+<a href="index.php">
+    <button type="button" class="btn btn-primary mx-2 my-2">Index Page</button>
+</a>
+
 <table class="table">
     <thead>
     <tr>
@@ -76,15 +84,14 @@ $order_items = selectAll($connection, 'order_items');
             <td><?= $titles; ?></td>
             <td><?= $total; ?></td>
             <td><?= $order['comments']; ?></td>
+            <td><a href="order.php?id=<?= $order['id']; ?>">
+                    <button type="button" class="btn btn-primary">View order</button>
+                </a></td>
         </tr>
     <?php
     endforeach; ?>
     </tbody>
 </table>
-
-<a href="cart.php ">
-    <button type="button" class="btn btn-primary">Go to cart</button>
-</a>
 
 </body>
 

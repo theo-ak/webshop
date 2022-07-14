@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin_logged_in'] = true;
 
         if(isset($_SESSION['rdrurl']))
-            header('location: '.$_SESSION['rdrurl']);
+            header('location: '. $_SESSION['rdrurl']);
         else
             header('location: products.php');
     }

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td>
                     <form method="post" action="index.php">
                         <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <input type="submit" value="Add" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">Add</button>
                     </form>
                 </td>
             </tr>

@@ -49,35 +49,32 @@ $order_items = selectAll($connection, 'order_items');
             <td><?= $order['date']; ?></td>
             <td><?= $order['name']; ?></td>
             <td><?= $order['details']; ?></td>
-                <?php
+            <?php
 
-                $sql = 'SELECT product_id FROM order_items WHERE order_id = :order_id';
-                $query = $connection->prepare($sql);
-                $query->execute([
-                    'order_id' => $order['id']
-                ]);
+            $order_ids = array_filter($order_items, function ($var) use ($order) {
+                return $var['order_id'] == $order['id'];
+            });
 
-                $product_ids = $query->fetchAll();
+            $title_ids = array_map(function ($var) {
+                return $var['product_id'];
+            }, $order_ids);
 
-                $product_titles = '';
-                $total = 0;
+            $titles = '';
+            $total = 0;
 
-                foreach ($product_ids as $product_id) {
-                    $sql = 'SELECT title, price FROM products WHERE id = :id';
-                    $query = $connection->prepare($sql);
-                    $query->execute([
-                        'id' => $product_id['product_id']
-                    ]);
-
-                    $title_price = $query->fetch();
-                    $product_titles = $product_titles . $title_price['title'] . '<br>';
-                    $total += $title_price['price'];
+            foreach ($title_ids as $title_id) {
+                foreach ($items as $item) {
+                    if ($item['id'] == $title_id) {
+                        $titles = $titles . $item['title'] . '<br>';
+                        $total += $item['price'];
+                    }
                 }
+            }
 
-                echo '<td>' . $product_titles . '</td>';
-                echo '<td>' . $total . '</td>';
+            ?>
 
-                ?>
+            <td><?= $titles; ?></td>
+            <td><?= $total; ?></td>
             <td><?= $order['comments']; ?></td>
         </tr>
     <?php

@@ -46,10 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         mail($to, $subject, $message, implode("\r\n", $headers));
 
-        $sql = 'INSERT INTO orders (date, details, comments) VALUES (:date, :details, :comments)';
+        $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (:date, :name, :details, :comments)';
         $query = $connection->prepare($sql);
         $query->execute([
             'date' => $date,
+            'name' => $name,
             'details' => $contact,
             'comments' => $comments
         ]);

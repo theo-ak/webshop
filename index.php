@@ -5,7 +5,9 @@ require_once 'common.php';
 $items = selectAll($connection, 'products');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['cart'][] = $_POST['id'];
+    if (!in_array($_POST['id'], $_SESSION['cart'])) {
+        $_SESSION['cart'][] = $_POST['id'];
+    }
 }
 
 ?>

@@ -2,6 +2,8 @@
 
 require_once 'config.php';
 
+session_start();
+
 try {
     $connection = new PDO(
         "mysql:host=" . SERVER . ";dbname=" . DBNAME,

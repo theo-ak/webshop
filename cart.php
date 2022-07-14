@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contact = isset($_POST['contact']) ? test_input($_POST['contact']) : "";
     $comments = isset($_POST['comments']) ? test_input($_POST['comments']) : "";
 
-    if ($name && $contact && $comments) {
+    if ($name && $contact) {
         $date = date("Y-m-d h:i:s");
         $item_ids = '';
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             '<p>Comments: ' . $comments . '</p>';
 
         foreach ($items as $item) {
-            if(in_array($item['id'], $_SESSION['cart'])) {
+            if (in_array($item['id'], $_SESSION['cart'])) {
                 $item_ids = $item_ids . ' ' . $item['id'];
                 $message = $message . '<p>' . $item['title'] .
                     '<br>' . $item['description'] .
@@ -73,6 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'product_id' => (int)$item
             ]);
         }
+
+        $_SESSION['cart'] = [];
+
+        header('Location: index.php');
     }
 }
 
@@ -86,61 +90,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>Music Shop</title>
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Price</th>
-        </tr>
-        </thead>
-        <tbody>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Price</th>
+    </tr>
+    </thead>
+    <tbody>
 
-        <?php foreach ($items as $item): ?>
-            <?php if(in_array($item['id'], $_SESSION['cart'])): ?>
-                <tr>
-                    <th scope="row"><?= $item['id']; ?></th>
-                    <td><?= $item['title']; ?></td>
-                    <td><?= $item['description']; ?></td>
-                    <td><?= $item['price']; ?></td>
-                    <td><div class="img"><img src="<?= $item['img']; ?>"></div></td>
-                    <td>
-                        <form method="post" action="cart.php">
-                            <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                            <input type="submit" value="Remove" class="btn btn-primary">
-                        </form>
-                    </td>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </tbody>
+    <?php
+    foreach ($items as $item): ?>
+        <?php
+        if (in_array($item['id'], $_SESSION['cart'])): ?>
+            <tr>
+                <th scope="row"><?= $item['id']; ?></th>
+                <td><?= $item['title']; ?></td>
+                <td><?= $item['description']; ?></td>
+                <td><?= $item['price']; ?></td>
+                <td>
+                    <div class="img"><img src="<?= $item['img']; ?>"></div>
+                </td>
+                <td>
+                    <form method="post" action="cart.php">
+                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
+                        <input type="submit" value="Remove" class="btn btn-primary">
+                    </form>
+                </td>
+            </tr>
+        <?php
+        endif; ?>
+    <?php
+    endforeach; ?>
+    </tbody>
 
-    </table>
+</table>
 
-    <form method="post" id="details-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="contact">Contact details</label>
-            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details" value="<?= $contact ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="comments">Comments</label>
-            <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments" value="<?= $comments ?>" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Checkout</button>
-    </form>
+<form method="post" id="details-form" action="<?php
+echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>"
+               required>
+    </div>
+    <div class="form-group">
+        <label for="contact">Contact details</label>
+        <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
+               value="<?= $contact ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="comments">Comments</label>
+        <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
+               value="<?= $comments ?>">
+    </div>
+    <button type="submit" class="btn btn-primary">Checkout</button>
+</form>
 
-    <a href="index.php "> <button type="button" class="btn btn-primary">Go to index</button></a>
+<a href="index.php ">
+    <button type="button" class="btn btn-primary">Go to index</button>
+</a>
 
 </body>
 

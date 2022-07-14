@@ -27,6 +27,7 @@ $order_items = selectAll($connection, 'order_items');
     <tr>
         <th scope="col">#</th>
         <th scope="col">Date</th>
+        <th scope="col">Name</th>
         <th scope="col">Contact details</th>
         <th scope="col">Items</th>
         <th scope="col">Comments</th>
@@ -39,8 +40,36 @@ $order_items = selectAll($connection, 'order_items');
         <tr>
             <th scope="row"><?= $order['id']; ?></th>
             <td><?= $order['date']; ?></td>
+            <td><?= $order['name']; ?></td>
             <td><?= $order['details']; ?></td>
-            <td><?php  ?></td>
+            <td>
+                <?php
+
+                $sql = 'SELECT product_id FROM order_items WHERE order_id = :order_id';
+                $query = $connection->prepare($sql);
+                $query->execute([
+                    'order_id' => $order['id']
+                ]);
+
+                $product_ids = $query->fetchAll();
+
+                $product_titles = '';
+
+                foreach ($product_ids as $product_id) {
+                    $sql = 'SELECT title FROM products WHERE id = :id';
+                    $query = $connection->prepare($sql);
+                    $query->execute([
+                        'id' => $product_id['product_id']
+                    ]);
+
+                    $title = $query->fetch();
+                    $product_titles = $product_titles . $title['title'] . '<br>';
+                }
+
+                echo $product_titles;
+
+                ?>
+            </td>
             <td><?= $order['comments']; ?></td>
         </tr>
     <?php

@@ -2,17 +2,21 @@
 
 require_once 'common.php';
 
-$cart_str = implode(',', $_SESSION['cart']);
-
-$sql = "SELECT * FROM products WHERE id NOT IN ($cart_str)";
-$query = $connection->prepare($sql);
-$query->execute();
-$items = $query->fetchAll();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($_POST['id'], $_SESSION['cart'])) {
         $_SESSION['cart'][] = $_POST['id'];
     }
+}
+
+$cart_str = implode(',', $_SESSION['cart']);
+
+if ($cart_str) {
+    $sql = "SELECT * FROM products WHERE id NOT IN ($cart_str)";
+    $query = $connection->prepare($sql);
+    $query->execute();
+    $items = $query->fetchAll();
+} else {
+    $items = selectAll($connection, 'products');
 }
 
 ?>

@@ -2,16 +2,27 @@
 
 require_once 'common.php';
 
-$items = selectAll($connection, 'products');
+$items = [];
+
+if (isset($_POST['id'])) {
+    $index = array_search($_POST['id'], $_SESSION['cart']);
+    array_splice($_SESSION['cart'], $index, 1);
+}
+
+$cart_str = implode(',', $_SESSION['cart']);
+
+if ($cart_str) {
+    $sql = "SELECT * FROM products WHERE id IN ($cart_str)";
+    $query = $connection->prepare($sql);
+    $query->execute();
+    $items = $query->fetchAll();
+}
 
 $name = $contact = $comments = "";
 $nameErr = $contactErr = $commentsErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['id'])) {
-        $index = array_search($_POST['id'], $_SESSION['cart']);
-        array_splice($_SESSION['cart'], $index, 1);
-    }
+
 
     $name = isset($_POST['name']) ? test_input($_POST['name']) : "";
     $contact = isset($_POST['contact']) ? test_input($_POST['contact']) : "";
@@ -110,25 +121,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php
     foreach ($items as $item): ?>
-        <?php
-        if (in_array($item['id'], $_SESSION['cart'])): ?>
-            <tr>
-                <th scope="row"><?= $item['id']; ?></th>
-                <td><?= $item['title']; ?></td>
-                <td><?= $item['description']; ?></td>
-                <td><?= $item['price']; ?></td>
-                <td>
-                    <div class="img"><img src="<?= $item['img']; ?>"></div>
-                </td>
-                <td>
-                    <form method="post" action="cart.php">
-                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <input type="submit" value="Remove" class="btn btn-primary">
-                    </form>
-                </td>
-            </tr>
-        <?php
-        endif; ?>
+        <tr>
+            <th scope="row"><?= $item['id']; ?></th>
+            <td><?= $item['title']; ?></td>
+            <td><?= $item['description']; ?></td>
+            <td><?= $item['price']; ?></td>
+            <td>
+                <div class="img"><img src="<?= $item['img']; ?>"></div>
+            </td>
+            <td>
+                <form method="post" action="cart.php">
+                    <input type="hidden" name="id" value="<?= $item['id']; ?>">
+                    <input type="submit" value="Remove" class="btn btn-primary">
+                </form>
+            </td>
+        </tr>
     <?php
     endforeach; ?>
     </tbody>

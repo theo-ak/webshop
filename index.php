@@ -3,10 +3,18 @@
 require_once 'common.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!in_array($_POST['id'], $_SESSION['cart'])) {
-        $_SESSION['cart'][] = $_POST['id'];
+    $id = $_POST['id'];
+
+    if (!$id) {
+        http_response_code(400);
+        exit;
+    }
+
+    if (selectById($connection, 'products', 'id', $id)->fetch() && !in_array($id, $_SESSION['cart'])) {
+        $_SESSION['cart'][] = $id;
     }
 }
+
 
 $cart_str = implode(',', $_SESSION['cart']);
 

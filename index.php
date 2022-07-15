@@ -44,20 +44,20 @@ if ($cart_str) {
 <body>
 
 <a href="products.php">
-    <button type="button" class="btn btn-primary mx-2 my-2">Admin Page</button>
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('admin page'); ?></button>
 </a>
 
 <a href="cart.php ">
-    <button type="button" class="btn btn-primary mx-2 my-2">Go to cart</button>
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('go to cart'); ?></button>
 </a>
 
 <table class="table">
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
+        <th scope="col"><?= translate('title'); ?></th>
+        <th scope="col"><?= translate('description'); ?></th>
+        <th scope="col"><?= translate('price'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -75,7 +75,7 @@ if ($cart_str) {
             <td>
                 <form method="post" action="index.php">
                     <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary"><?= translate('add'); ?></button>
                 </form>
             </td>
         </tr>

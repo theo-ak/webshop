@@ -40,12 +40,12 @@ $order_items = selectAll($connection, 'order_items');
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Date</th>
-        <th scope="col">Name</th>
-        <th scope="col">Contact details</th>
-        <th scope="col">Items</th>
-        <th scope="col">Total</th>
-        <th scope="col">Comments</th>
+        <th scope="col"><?= translate('date'); ?></th>
+        <th scope="col"><?= translate('name'); ?></th>
+        <th scope="col"><?= translate('contact details') ?></th>
+        <th scope="col"><?= translate('items'); ?></th>
+        <th scope="col"><?= translate('total'); ?></th>
+        <th scope="col"><?= translate('comments'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -85,7 +85,7 @@ $order_items = selectAll($connection, 'order_items');
             <td><?= $total; ?></td>
             <td><?= $order['comments']; ?></td>
             <td><a href="order.php?id=<?= $order['id']; ?>">
-                    <button type="button" class="btn btn-primary">View order</button>
+                    <button type="button" class="btn btn-primary"><?= translate('view order'); ?></button>
                 </a></td>
         </tr>
     <?php

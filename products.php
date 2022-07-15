@@ -41,24 +41,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 <body>
 
 <a href="product.php ">
-    <button type="button" class="btn btn-primary mx-2 my-2">Add Product</button>
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Add Product'); ?></button>
 </a>
 
 <a href="orders.php">
-    <button class="btn btn-primary mx-2 my-2">Orders page</button>
+    <button class="btn btn-primary mx-2 my-2"><?= translate('Orders page'); ?></button>
 </a>
 
 <a href="index.php">
-    <button class="btn btn-primary mx-2 my-2">Index page</button>
+    <button class="btn btn-primary mx-2 my-2"><?= translate('Index page') ?></button>
 </a>
 
 <table class="table">
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
+        <th scope="col"><?= translate('title'); ?></th>
+        <th scope="col"><?= translate('description'); ?></th>
+        <th scope="col"><?= translate('price'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -75,13 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             </td>
             <td>
                 <a href="product.php?id=<?= $item['id'] ?>">
-                    <button class="btn btn-primary mt-2">Edit</button>
+                    <button class="btn btn-primary mt-2"><?= translate('Edit'); ?></button>
                 </a>
 
                 <form method="post" action="<?php
                 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <input type="submit" value="Delete" class="btn btn-primary mt-2">
+                    <input type="submit" value="<?= translate('Delete'); ?>" class="btn btn-primary mt-2">
                 </form>
             </td>
         </tr>

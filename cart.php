@@ -22,8 +22,6 @@ $name = $contact = $comments = "";
 $nameErr = $contactErr = $commentsErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
     $name = isset($_POST['name']) ? test_input($_POST['name']) : "";
     $contact = isset($_POST['contact']) ? test_input($_POST['contact']) : "";
     $comments = isset($_POST['comments']) ? test_input($_POST['comments']) : "";
@@ -112,9 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
+        <th scope="col"><?= translate('title') ?></th>
+        <th scope="col"><?= translate('description') ?></th>
+        <th scope="col"><?= translate('price') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -132,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <td>
                 <form method="post" action="cart.php">
                     <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <input type="submit" value="Remove" class="btn btn-primary">
+                    <input type="submit" value="<?= translate('remove'); ?>" class="btn btn-primary">
                 </form>
             </td>
         </tr>
@@ -145,17 +143,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="post" id="details-form" action="<?php
 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <div class="form-group">
-        <label for="name">Name</label>
+        <label for="name"><?= translate('name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>"
                required>
     </div>
     <div class="form-group">
-        <label for="contact">Contact details</label>
+        <label for="contact"><?= translate('contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
                value="<?= $contact ?>" required>
     </div>
     <div class="form-group">
-        <label for="comments">Comments</label>
+        <label for="comments"><?= translate('comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
                value="<?= $comments ?>">
     </div>
@@ -163,7 +161,7 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 </form>
 
 <a href="index.php ">
-    <button type="button" class="btn btn-primary">Go to index</button>
+    <button type="button" class="btn btn-primary"><?= translate('go to index'); ?></button>
 </a>
 
 </body>

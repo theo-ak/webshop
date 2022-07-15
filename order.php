@@ -3,7 +3,7 @@
 require_once 'common.php';
 
 if (!isset($_GET['id'])) {
-    header('location: '. $_SESSION['rdrurl']);
+    header('location: ' . $_SESSION['rdrurl']);
 }
 
 $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
@@ -50,12 +50,12 @@ foreach ($product_ids as $product_id) {
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Date</th>
-        <th scope="col">Name</th>
-        <th scope="col">Contact details</th>
-        <th scope="col">Items</th>
-        <th scope="col">Total</th>
-        <th scope="col">Comments</th>
+        <th scope="col"><?= translate('date'); ?></th>
+        <th scope="col"><?= translate('name'); ?></th>
+        <th scope="col"><?= translate('contact details') ?></th>
+        <th scope="col"><?= translate('items'); ?></th>
+        <th scope="col"><?= translate('total'); ?></th>
+        <th scope="col"><?= translate('comments'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -76,15 +76,15 @@ foreach ($product_ids as $product_id) {
 </table>
 
 <a href="orders.php ">
-    <button type="button" class="btn btn-primary mx-2">Orders page</button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('orders page'); ?>></button>
 </a>
 
 <a href="products.php ">
-    <button type="button" class="btn btn-primary mx-2">Products page</button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('products page'); ?></button>
 </a>
 
 <a href="index.php ">
-    <button type="button" class="btn btn-primary mx-2">Index page</button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('index page'); ?></button>
 </a>
 
 </body>

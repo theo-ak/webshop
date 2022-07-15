@@ -109,38 +109,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="post" id="details-form" action="<?php
 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title"><?= translate('title'); ?></label>
         <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="<?= $title; ?>"
                required>
     </div>
     <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description"><?= translate('description'); ?></label>
         <input type="text" class="form-control" id="description" name="description" placeholder="Enter description"
                value="<?= $description; ?>" required>
     </div>
     <div class="form-group">
-        <label for="price">Price</label>
+        <label for="price"><?= translate('price'); ?></label>
         <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="Enter price"
                value="<?= $price ?>" required>
     </div>
 
     <div class="form-group">
-        Select image to upload:
+        <?= translate('Select image to upload'); ?>:
         <input type="file" name="fileToUpload" id="fileToUpload" required>
         <input type="hidden" name="id" value="<?= $id ?>">
 
         <?php
         if (isset($image)): ?>
-            <p>Current image:</p>
+            <p><?= translate('Current image') ?>:</p>
             <img src="<?= $image ?>" alt="no image">
         <?php
         endif; ?>
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary" id="save">Save</button>
+        <button type="submit" class="btn btn-primary" id="save"><?= translate('Save'); ?></button>
         <a href="products.php">
-            <button class="btn btn-primary" type="button">Back to products page</button>
+            <button class="btn btn-primary" type="button"><?= translate('Back to products page'); ?></button>
         </a>
     </div>
 

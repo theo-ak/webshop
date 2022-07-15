@@ -29,61 +29,49 @@ if ($cart_str) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require 'header.php'; ?>
 
-<head>
-    <meta charset="utf-8">
-    <title>Music Shop</title>
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <a href="products.php">
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('admin page'); ?></button>
+    </a>
 
-<body>
+    <a href="cart.php ">
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('go to cart'); ?></button>
+    </a>
 
-<a href="products.php">
-    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('admin page'); ?></button>
-</a>
-
-<a href="cart.php ">
-    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('go to cart'); ?></button>
-</a>
-
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col"><?= translate('title'); ?></th>
-        <th scope="col"><?= translate('description'); ?></th>
-        <th scope="col"><?= translate('price'); ?></th>
-    </tr>
-    </thead>
-    <tbody>
-
-    <?php
-    foreach ($items as $item): ?>
+    <table class="table">
+        <thead>
         <tr>
-            <th scope="row"><?= $item['id']; ?></th>
-            <td><?= $item['title']; ?></td>
-            <td><?= $item['description']; ?></td>
-            <td><?= $item['price']; ?></td>
-            <td>
-                <div class="image"><img src="<?= $item['img']; ?>"></div>
-            </td>
-            <td>
-                <form method="post" action="index.php">
-                    <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <button type="submit" class="btn btn-primary"><?= translate('add'); ?></button>
-                </form>
-            </td>
+            <th scope="col">#</th>
+            <th scope="col"><?= translate('title'); ?></th>
+            <th scope="col"><?= translate('description'); ?></th>
+            <th scope="col"><?= translate('price'); ?></th>
         </tr>
-    <?php
-    endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
 
-</body>
+        <?php
+        foreach ($items as $item): ?>
+            <tr>
+                <th scope="row"><?= $item['id']; ?></th>
+                <td><?= $item['title']; ?></td>
+                <td><?= $item['description']; ?></td>
+                <td><?= $item['price']; ?></td>
+                <td>
+                    <div class="image"><img src="<?= $item['img']; ?>"></div>
+                </td>
+                <td>
+                    <form method="post" action="index.php">
+                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
+                        <button type="submit" class="btn btn-primary"><?= translate('add'); ?></button>
+                    </form>
+                </td>
+            </tr>
+        <?php
+        endforeach; ?>
+        </tbody>
+    </table>
 
-</html>
+<?php
+require 'footer.php'; ?>

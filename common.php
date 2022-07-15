@@ -4,6 +4,11 @@ require_once 'config.php';
 
 session_start();
 
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+
 try {
     $connection = new PDO(
         "mysql:host=" . SERVER . ";dbname=" . DBNAME,

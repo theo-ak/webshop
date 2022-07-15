@@ -1,9 +1,5 @@
 <?php
 
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
 define('SERVER', '{servername}');
 define('USERNAME', '{username}');
 define('PASSWORD', '{password}');

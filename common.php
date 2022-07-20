@@ -23,11 +23,10 @@ define('LANGUAGE', substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
 
 function translate($label)
 {
-    $key = strtolower($label);
-    if (LANGUAGE == 'ro' && isset(TRANSLATIONS[$key])) {
-        return ucfirst(TRANSLATIONS[$key]);
+    if (LANGUAGE == 'ro' && isset(TRANSLATIONS[$label])) {
+        return TRANSLATIONS[$label];
     } else {
-        return ucfirst($key);
+        return $label;
     }
 }
 

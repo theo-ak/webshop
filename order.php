@@ -39,12 +39,12 @@ require 'header.php'; ?>
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col"><?= translate('date'); ?></th>
-        <th scope="col"><?= translate('name'); ?></th>
-        <th scope="col"><?= translate('contact details') ?></th>
-        <th scope="col"><?= translate('items'); ?></th>
-        <th scope="col"><?= translate('total'); ?></th>
-        <th scope="col"><?= translate('comments'); ?></th>
+        <th scope="col"><?= translate('Date'); ?></th>
+        <th scope="col"><?= translate('Name'); ?></th>
+        <th scope="col"><?= translate('Contact details') ?></th>
+        <th scope="col"><?= translate('Items'); ?></th>
+        <th scope="col"><?= translate('Total'); ?></th>
+        <th scope="col"><?= translate('Comments'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -65,15 +65,15 @@ require 'header.php'; ?>
 </table>
 
 <a href="orders.php ">
-    <button type="button" class="btn btn-primary mx-2"><?= translate('orders page'); ?>></button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('Orders page'); ?></button>
 </a>
 
 <a href="products.php ">
-    <button type="button" class="btn btn-primary mx-2"><?= translate('products page'); ?></button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('Products page'); ?></button>
 </a>
 
 <a href="index.php ">
-    <button type="button" class="btn btn-primary mx-2"><?= translate('index page'); ?></button>
+    <button type="button" class="btn btn-primary mx-2"><?= translate('Index page'); ?></button>
 </a>
 
 <?php

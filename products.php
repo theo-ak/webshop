@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 require 'header.php'; ?>
 
 <a href="product.php ">
-    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Add Product'); ?></button>
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Add product'); ?></button>
 </a>
 
 <a href="orders.php">
@@ -45,9 +45,9 @@ require 'header.php'; ?>
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col"><?= translate('title'); ?></th>
-        <th scope="col"><?= translate('description'); ?></th>
-        <th scope="col"><?= translate('price'); ?></th>
+        <th scope="col"><?= translate('Title'); ?></th>
+        <th scope="col"><?= translate('Description'); ?></th>
+        <th scope="col"><?= translate('Price'); ?></th>
     </tr>
     </thead>
     <tbody>

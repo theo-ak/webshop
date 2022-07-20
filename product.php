@@ -98,17 +98,17 @@ require 'header.php'; ?>
 <form method="post" id="details-form" action="<?php
 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="title"><?= translate('title'); ?></label>
+        <label for="title"><?= translate('Title'); ?></label>
         <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="<?= $title; ?>"
                required>
     </div>
     <div class="form-group">
-        <label for="description"><?= translate('description'); ?></label>
+        <label for="description"><?= translate('Description'); ?></label>
         <input type="text" class="form-control" id="description" name="description" placeholder="Enter description"
                value="<?= $description; ?>" required>
     </div>
     <div class="form-group">
-        <label for="price"><?= translate('price'); ?></label>
+        <label for="price"><?= translate('Price'); ?></label>
         <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="Enter price"
                value="<?= $price ?>" required>
     </div>

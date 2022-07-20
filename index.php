@@ -33,20 +33,20 @@ if ($cart_str) {
 require 'header.php'; ?>
 
     <a href="products.php">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('admin page'); ?></button>
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Admin page'); ?></button>
     </a>
 
     <a href="cart.php ">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('go to cart'); ?></button>
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Go to cart'); ?></button>
     </a>
 
     <table class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col"><?= translate('title'); ?></th>
-            <th scope="col"><?= translate('description'); ?></th>
-            <th scope="col"><?= translate('price'); ?></th>
+            <th scope="col"><?= translate('Title'); ?></th>
+            <th scope="col"><?= translate('Description'); ?></th>
+            <th scope="col"><?= translate('Price'); ?></th>
         </tr>
         </thead>
         <tbody>
@@ -64,7 +64,7 @@ require 'header.php'; ?>
                 <td>
                     <form method="post" action="index.php">
                         <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <button type="submit" class="btn btn-primary"><?= translate('add'); ?></button>
+                        <button type="submit" class="btn btn-primary"><?= translate('Add'); ?></button>
                     </form>
                 </td>
             </tr>

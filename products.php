@@ -11,7 +11,7 @@ if (!$_SESSION['admin_logged_in']) {
 $items = selectAll($connection, 'products');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $id = (int)test_input($_POST['id']);
+    $id = (int)testInput($_POST['id']);
 
     if ($id) {
         $sql = 'DELETE FROM products WHERE id=:id';

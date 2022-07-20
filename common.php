@@ -38,7 +38,11 @@ function selectAll($connection, $table)
     return $query->fetchAll();
 }
 
-function selectById($connection, $table, $id_from_table, $id)
+function selectById(
+    $connection,
+    $table,
+    $id_from_table,
+    $id)
 {
     $sql = "SELECT * FROM $table WHERE $id_from_table = :id";
     $query = $connection->prepare($sql);
@@ -49,7 +53,7 @@ function selectById($connection, $table, $id_from_table, $id)
     return $query;
 }
 
-function test_input($data)
+function testInput($data)
 {
     $data = trim($data);
     $data = stripslashes($data);

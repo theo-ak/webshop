@@ -28,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = isset($_POST['id']) ? test_input($_POST['id']) : "";
-    $title = isset($_POST['title']) ? test_input($_POST['title']) : "";
-    $description = isset($_POST['description']) ? test_input($_POST['description']) : "";
-    $price = isset($_POST['price']) ? (float)test_input($_POST['price']) : "";
+    $id = isset($_POST['id']) ? testInput($_POST['id']) : "";
+    $title = isset($_POST['title']) ? testInput($_POST['title']) : "";
+    $description = isset($_POST['description']) ? testInput($_POST['description']) : "";
+    $price = isset($_POST['price']) ? (float)testInput($_POST['price']) : "";
 
     if (isset($_FILES['fileToUpload'])) {
         $target_dir = "img/";

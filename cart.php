@@ -22,9 +22,9 @@ $name = $contact = $comments = "";
 $nameErr = $contactErr = $commentsErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = isset($_POST['name']) ? test_input($_POST['name']) : "";
-    $contact = isset($_POST['contact']) ? test_input($_POST['contact']) : "";
-    $comments = isset($_POST['comments']) ? test_input($_POST['comments']) : "";
+    $name = isset($_POST['name']) ? testInput($_POST['name']) : "";
+    $contact = isset($_POST['contact']) ? testInput($_POST['contact']) : "";
+    $comments = isset($_POST['comments']) ? testInput($_POST['comments']) : "";
 
     if ($name && $contact) {
         $date = date("Y-m-d h:i:s");

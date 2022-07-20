@@ -5,8 +5,8 @@ require_once 'common.php';
 $_SESSION['admin_logged_in'] = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = isset($_POST['username']) ? test_input($_POST['username']) : "";
-    $password = isset($_POST['password']) ? test_input($_POST['password']) : "";
+    $username = isset($_POST['username']) ? testInput($_POST['username']) : "";
+    $password = isset($_POST['password']) ? testInput($_POST['password']) : "";
 
 
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {

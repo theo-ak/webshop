@@ -35,6 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $details['contact'] = isset($_POST['contact']) ? testInput($_POST['contact']) : '';
     $details['comments'] = isset($_POST['comments']) ? testInput($_POST['comments']) : '';
 
+    if (preg_match('/[^A-Za-z]/', $details['name'])) {
+        $errors['name'] = 'Name has invalid characters. Please try again.';
+        header('Location: cart.php');
+        exit;
+    }
+
     if ($details['name'] && $details['comments']) {
         $details['date'] = date('Y-m-d h:i:s');
         $item_ids = '';
@@ -148,8 +154,9 @@ require 'header.php';
       action="cart.php">
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $details['name'] ?>"
-               required>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
+               value="<?= $details['name'] ?>" required>
+        <span><?= $errors['name']; ?></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>

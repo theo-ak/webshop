@@ -43,9 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $subject = 'New Order';
 
+        $message = file_get_contents('html/mail_template.html');
+        $item_list = file_get_contents('html/items_list.html');
+
+        foreach ($details as $key => $value) {
+            $message = str_replace("{{ $key }}", $value, $message);
+        }
+
         foreach ($items as $item) {
             if (in_array($item['id'], $_SESSION['cart'])) {
                 $item_ids = $item_ids . ' ' . $item['id'];
+                $message = $message . str_replace(
+                        ["{{ title }}", "{{ description }}", "{{ price }}"],
+                        [$item['title'], $item['description'], $item['price']],
+                        $item_list
+                    );
             }
         }
 

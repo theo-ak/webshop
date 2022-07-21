@@ -122,8 +122,7 @@ require 'header.php';
     </thead>
     <tbody>
 
-    <?php
-    foreach ($items as $item): ?>
+    <?php foreach ($items as $item): ?>
         <tr>
             <th scope="row"><?= $item['id']; ?></th>
             <td><?= $item['title']; ?></td>
@@ -139,14 +138,13 @@ require 'header.php';
                 </form>
             </td>
         </tr>
-    <?php
-    endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
 
 </table>
 
-<form method="post" id="details-form" action="<?php
-echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+<form method="post" id="details-form"
+      action="cart.php">
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $details['name'] ?>"
@@ -169,5 +167,4 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <button type="button" class="btn btn-primary"><?= translate('Go to index'); ?></button>
 </a>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>

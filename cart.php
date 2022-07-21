@@ -18,33 +18,34 @@ if ($cart_str) {
     $items = $query->fetchAll();
 }
 
-$name = $contact = $comments = "";
-$nameErr = $contactErr = $commentsErr = "";
+$details = [
+        'name' => '',
+        'contact' => '',
+        'comments' => ''
+];
+
+$errors = [
+        'name' => '',
+        'contact' => '',
+        'comments' => ''
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = isset($_POST['name']) ? testInput($_POST['name']) : "";
-    $contact = isset($_POST['contact']) ? testInput($_POST['contact']) : "";
-    $comments = isset($_POST['comments']) ? testInput($_POST['comments']) : "";
+    $details['name'] = isset($_POST['name']) ? testInput($_POST['name']) : '';
+    $details['contact'] = isset($_POST['contact']) ? testInput($_POST['contact']) : '';
+    $details['comments'] = isset($_POST['comments']) ? testInput($_POST['comments']) : '';
 
-    if ($name && $contact) {
-        $date = date("Y-m-d h:i:s");
+    if ($details['name'] && $details['comments']) {
+        $details['date'] = date('Y-m-d h:i:s');
         $item_ids = '';
 
         $to = MANAGER;
 
-        $subject = "New Order";
-
-        $message = '<p>Name: ' . $name . '</p>' .
-            '<p>Contact: ' . $contact . '</p>' .
-            '<p>Comments: ' . $comments . '</p>';
+        $subject = 'New Order';
 
         foreach ($items as $item) {
             if (in_array($item['id'], $_SESSION['cart'])) {
                 $item_ids = $item_ids . ' ' . $item['id'];
-                $message = $message . '<p>' . $item['title'] .
-                    '<br>' . $item['description'] .
-                    '<br>' . $item['price'] .
-                    '<br>' . '<img src="' . $item['img'] . '">' . '</p>';
             }
         }
 
@@ -58,10 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (:date, :name, :details, :comments)';
         $query = $connection->prepare($sql);
         $query->execute([
-            'date' => $date,
-            'name' => $name,
-            'details' => $contact,
-            'comments' => $comments
+            'date' => $details['date'],
+            'name' => $details['name'],
+            'details' => $details['contact'],
+            'comments' => $details['comments']
         ]);
 
         $items_arr = explode(' ', $item_ids);
@@ -89,11 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+require 'header.php';
 
 ?>
-
-<?php
-require 'header.php'; ?>
 
 <table class="table">
     <thead>
@@ -133,18 +132,18 @@ require 'header.php'; ?>
 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>"
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $details['name'] ?>"
                required>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
-               value="<?= $contact ?>" required>
+               value="<?= $details['contact'] ?>" required>
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
-               value="<?= $comments ?>">
+               value="<?= $details['comments'] ?>">
     </div>
     <button type="submit" class="btn btn-primary">Checkout</button>
 </form>

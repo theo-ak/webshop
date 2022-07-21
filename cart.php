@@ -57,9 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $items_arr = explode(' ', $item_ids);
         $items_arr = array_filter($items_arr);
 
-        $sql = 'SELECT MAX(id) FROM orders';
+        $sql = 'SELECT id FROM orders WHERE date = :date';
         $query = $connection->prepare($sql);
-        $query->execute();
+        $query->execute([
+                'date' => $details['date']
+        ]);
 
         $order_arr = $query->fetch();
         $order_id = $order_arr[0];

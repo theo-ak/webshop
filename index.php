@@ -10,18 +10,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (selectById($connection, 'products', 'id', $id)->fetch() && !in_array($id, $_SESSION['cart'])) {
+    if (selectById($connection, 'products', 'id', $id)->fetch()
+        && !in_array(
+            $id,
+            $_SESSION['cart']
+        )
+    ) {
         $_SESSION['cart'][] = $id;
     }
 }
 
 
-$cart_str = implode(',', $_SESSION['cart']);
+$cart_str = implode(
+    ',',
+    $_SESSION['cart']
+);
 
 if ($cart_str) {
-    $sql = "SELECT * FROM products WHERE id NOT IN ($cart_str)";
+    $sql   = "SELECT * FROM products WHERE NOT FIND_IN_SET(id, :string)";
     $query = $connection->prepare($sql);
-    $query->execute();
+    $query->execute([
+            'string' => $cart_str
+    ]);
+
     $items = $query->fetchAll();
 } else {
     $items = selectAll($connection, 'products')->fetchAll();
@@ -33,11 +44,15 @@ if ($cart_str) {
 require 'header.php'; ?>
 
     <a href="products.php">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Admin page'); ?></button>
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
+                'Admin page'
+            ); ?></button>
     </a>
 
     <a href="cart.php ">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Go to cart'); ?></button>
+        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
+                'Go to cart'
+            ); ?></button>
     </a>
 
     <table class="table">
@@ -63,8 +78,12 @@ require 'header.php'; ?>
                 </td>
                 <td>
                     <form method="post" action="index.php">
-                        <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                        <button type="submit" class="btn btn-primary"><?= translate('Add'); ?></button>
+                        <input type="hidden" name="id"
+                               value="<?= $item['id']; ?>">
+                        <button type="submit"
+                                class="btn btn-primary"><?= translate(
+                                'Add'
+                            ); ?></button>
                     </form>
                 </td>
             </tr>

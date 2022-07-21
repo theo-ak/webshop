@@ -99,9 +99,9 @@ require 'header.php'; ?>
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col"><?= translate('title') ?></th>
-        <th scope="col"><?= translate('description') ?></th>
-        <th scope="col"><?= translate('price') ?></th>
+        <th scope="col"><?= translate('Title') ?></th>
+        <th scope="col"><?= translate('Description') ?></th>
+        <th scope="col"><?= translate('Price') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -119,7 +119,7 @@ require 'header.php'; ?>
             <td>
                 <form method="post" action="cart.php">
                     <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <input type="submit" value="<?= translate('remove'); ?>" class="btn btn-primary">
+                    <input type="submit" value="<?= translate('Remove'); ?>" class="btn btn-primary">
                 </form>
             </td>
         </tr>
@@ -132,17 +132,17 @@ require 'header.php'; ?>
 <form method="post" id="details-form" action="<?php
 echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <div class="form-group">
-        <label for="name"><?= translate('name'); ?></label>
+        <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="<?= $name ?>"
                required>
     </div>
     <div class="form-group">
-        <label for="contact"><?= translate('contact details'); ?></label>
+        <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
                value="<?= $contact ?>" required>
     </div>
     <div class="form-group">
-        <label for="comments"><?= translate('comments'); ?></label>
+        <label for="comments"><?= translate('Comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
                value="<?= $comments ?>">
     </div>
@@ -150,7 +150,7 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 </form>
 
 <a href="index.php ">
-    <button type="button" class="btn btn-primary"><?= translate('go to index'); ?></button>
+    <button type="button" class="btn btn-primary"><?= translate('Go to index'); ?></button>
 </a>
 
 <?php

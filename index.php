@@ -24,7 +24,7 @@ if ($cart_str) {
     $query->execute();
     $items = $query->fetchAll();
 } else {
-    $items = selectAll($connection, 'products');
+    $items = selectAll($connection, 'products')->fetchAll();
 }
 
 ?>

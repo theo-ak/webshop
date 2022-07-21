@@ -8,9 +8,9 @@ if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }
 
-$items = selectAll($connection, 'products');
-$orders = selectAll($connection, 'orders');
-$order_items = selectAll($connection, 'order_items');
+$items = selectAll($connection, 'products')->fetchAll();
+$orders = selectAll($connection, 'orders')->fetchAll();
+$order_items = selectAll($connection, 'order_items')->fetchAll();
 
 ?>
 

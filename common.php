@@ -35,7 +35,7 @@ function selectAll($connection, $table)
     $sql = "SELECT * FROM $table";
     $query = $connection->prepare($sql);
     $query->execute();
-    return $query->fetchAll();
+    return $query;
 }
 
 function selectById(

@@ -8,7 +8,7 @@ if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }
 
-$items = selectAll($connection, 'products');
+$items = selectAll($connection, 'products')->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = (int)testInput($_POST['id']);

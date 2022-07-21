@@ -39,34 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $details['date'] = date('Y-m-d h:i:s');
         $item_ids = '';
 
-        $to = MANAGER;
-
-        $subject = 'New Order';
-
-        $message = file_get_contents('html/mail_template.html');
-        $item_list = file_get_contents('html/items_list.html');
-
-        foreach ($details as $key => $value) {
-            $message = str_replace("{{ $key }}", $value, $message);
-        }
-
         foreach ($items as $item) {
             if (in_array($item['id'], $_SESSION['cart'])) {
                 $item_ids = $item_ids . ' ' . $item['id'];
-                $message = $message . str_replace(
-                        ["{{ title }}", "{{ description }}", "{{ price }}"],
-                        [$item['title'], $item['description'], $item['price']],
-                        $item_list
-                    );
             }
         }
-
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-        $headers[] = 'From: <dummy_email@provider.eu>';
-
-        mail($to, $subject, $message, implode("\r\n", $headers));
 
         $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (:date, :name, :details, :comments)';
         $query = $connection->prepare($sql);
@@ -95,6 +72,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'product_id' => (int)$item
             ]);
         }
+
+        $to = MANAGER;
+
+        $subject = 'New Order';
+
+        $message = file_get_contents('html/mail_template.html');
+        $item_list = file_get_contents('html/items_list.html');
+
+        foreach ($details as $key => $value) {
+            $message = str_replace("{{ $key }}", $value, $message);
+        }
+
+        foreach ($items as $item) {
+            $message = $message . str_replace(
+                    ["{{ title }}", "{{ description }}", "{{ price }}"],
+                    [$item['title'], $item['description'], $item['price']],
+                    $item_list
+                );
+        }
+
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+        $headers[] = 'From: <dummy_email@provider.eu>';
+
+        mail($to, $subject, $message, implode("\r\n", $headers));
 
         $_SESSION['cart'] = [];
 

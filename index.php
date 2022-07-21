@@ -30,7 +30,7 @@ if ($cart_str) {
     $sql   = "SELECT * FROM products WHERE NOT FIND_IN_SET(id, :string)";
     $query = $connection->prepare($sql);
     $query->execute([
-            'string' => $cart_str
+        'string' => $cart_str,
     ]);
 
     $items = $query->fetchAll();
@@ -38,59 +38,55 @@ if ($cart_str) {
     $items = selectAll($connection, 'products')->fetchAll();
 }
 
+require 'header.php';
+
 ?>
 
-<?php
-require 'header.php'; ?>
+<a href="products.php">
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
+            'Admin page'
+        ); ?></button>
+</a>
 
-    <a href="products.php">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
-                'Admin page'
-            ); ?></button>
-    </a>
+<a href="cart.php ">
+    <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
+            'Go to cart'
+        ); ?></button>
+</a>
 
-    <a href="cart.php ">
-        <button type="button" class="btn btn-primary mx-2 my-2"><?= translate(
-                'Go to cart'
-            ); ?></button>
-    </a>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col"><?= translate('Title'); ?></th>
+        <th scope="col"><?= translate('Description'); ?></th>
+        <th scope="col"><?= translate('Price'); ?></th>
+    </tr>
+    </thead>
+    <tbody>
 
-    <table class="table">
-        <thead>
+    <?php foreach ($items as $item): ?>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col"><?= translate('Title'); ?></th>
-            <th scope="col"><?= translate('Description'); ?></th>
-            <th scope="col"><?= translate('Price'); ?></th>
+            <th scope="row"><?= $item['id']; ?></th>
+            <td><?= $item['title']; ?></td>
+            <td><?= $item['description']; ?></td>
+            <td><?= $item['price']; ?></td>
+            <td>
+                <div class="image"><img src="<?= $item['img']; ?>"></div>
+            </td>
+            <td>
+                <form method="post" action="index.php">
+                    <input type="hidden" name="id"
+                           value="<?= $item['id']; ?>">
+                    <button type="submit"
+                            class="btn btn-primary"><?= translate(
+                            'Add'
+                        ); ?></button>
+                </form>
+            </td>
         </tr>
-        </thead>
-        <tbody>
+    <?php endforeach; ?>
+    </tbody>
+</table>
 
-        <?php
-        foreach ($items as $item): ?>
-            <tr>
-                <th scope="row"><?= $item['id']; ?></th>
-                <td><?= $item['title']; ?></td>
-                <td><?= $item['description']; ?></td>
-                <td><?= $item['price']; ?></td>
-                <td>
-                    <div class="image"><img src="<?= $item['img']; ?>"></div>
-                </td>
-                <td>
-                    <form method="post" action="index.php">
-                        <input type="hidden" name="id"
-                               value="<?= $item['id']; ?>">
-                        <button type="submit"
-                                class="btn btn-primary"><?= translate(
-                                'Add'
-                            ); ?></button>
-                    </form>
-                </td>
-            </tr>
-        <?php
-        endforeach; ?>
-        </tbody>
-    </table>
-
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>

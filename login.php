@@ -3,7 +3,7 @@
 require_once 'common.php';
 
 if ($_SESSION['admin_logged_in']) {
-    header('products.php');
+    header('Location: products.php');
     exit;
 }
 
@@ -15,10 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
         $_SESSION['admin_logged_in'] = true;
 
-        if(isset($_SESSION['rdrurl']))
-            header('location: '. $_SESSION['rdrurl']);
-        else
+        if (isset($_SESSION['rdrurl'])) {
+            header('location: '.$_SESSION['rdrurl']);
+            exit;
+        }
+        else {
             header('location: products.php');
+            exit;
+        }
     }
 }
 

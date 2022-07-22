@@ -2,11 +2,14 @@
 
 require_once 'common.php';
 
-$_SESSION['admin_logged_in'] = false;
+if ($_SESSION['admin_logged_in']) {
+    header('products.php');
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = isset($_POST['username']) ? testInput($_POST['username']) : "";
-    $password = isset($_POST['password']) ? testInput($_POST['password']) : "";
+    $username = isset($_POST['username']) ? testInput($_POST['username']) : '';
+    $password = isset($_POST['password']) ? testInput($_POST['password']) : '';
 
 
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
@@ -19,12 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+require 'header.php';
+
 ?>
 
-<?php
-require 'header.php'; ?>
-
-    <form method="post" id="details-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+    <form method="post" id="details-form" action="login.php">
         <div class="form-group">
             <label for="username"><?= translate('Username') ?></label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
@@ -36,6 +38,5 @@ require 'header.php'; ?>
         <button type="submit" class="btn btn-primary" id="login">Login</button>
     </form>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>
 

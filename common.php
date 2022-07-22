@@ -9,6 +9,10 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
+if (!isset($_SESSION['admin_logged_in'])) {
+    $_SESSION['admin_logged_in'] = false;
+}
+
 try {
     $connection = new PDO(
         "mysql:host=" . SERVER . ";dbname=" . DBNAME,

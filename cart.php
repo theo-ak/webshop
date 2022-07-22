@@ -24,24 +24,12 @@ $details = [
         'comments' => ''
 ];
 
-$errors = [
-        'name' => '',
-        'contact' => '',
-        'comments' => ''
-];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $details['name'] = isset($_POST['name']) ? testInput($_POST['name']) : '';
     $details['contact'] = isset($_POST['contact']) ? testInput($_POST['contact']) : '';
     $details['comments'] = isset($_POST['comments']) ? testInput($_POST['comments']) : '';
 
-    if (preg_match('/[^A-Za-z]/', $details['name'])) {
-        $errors['name'] = 'Name has invalid characters. Please try again.';
-        header('Location: cart.php');
-        exit;
-    }
-
-    if ($details['name'] && $details['comments']) {
+    if (isValid($details['name']) && $details['contact'] && $details['comments']) {
         $details['date'] = date('Y-m-d h:i:s');
         $item_ids = '';
 
@@ -112,6 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     }
+
+    header('Location: cart.php');
+    exit;
 }
 
 require 'header.php';
@@ -156,7 +147,7 @@ require 'header.php';
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
                value="<?= $details['name'] ?>" required>
-        <span><?= $errors['name']; ?></span>
+        <span id="name_err"></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
@@ -168,11 +159,25 @@ require 'header.php';
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
                value="<?= $details['comments'] ?>">
     </div>
-    <button type="submit" class="btn btn-primary">Checkout</button>
+    <button type="submit" class="btn btn-primary" id="checkout-btn">Checkout</button>
 </form>
 
 <a href="index.php ">
     <button type="button" class="btn btn-primary"><?= translate('Go to index'); ?></button>
 </a>
 
+<script>
+    $(document).ready(function () {
+        $('#name').keyup(function () {
+            var regex = /^[a-zA-Z\s]*$/;
+            if (!regex.test($('#name').val())) {
+                $('#name_err').html('Invalid characters in name field');
+                $('#checkout-btn').prop('disabled', true);
+            } else {
+                $('#name_err').html('');
+                $('#checkout-btn').prop('disabled', false);
+            }
+        });
+    });
+</script>
 <?php require 'footer.php'; ?>

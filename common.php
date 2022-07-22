@@ -60,3 +60,13 @@ function testInput($data)
     );
 }
 
+function isValid($name)
+{
+    if(!$name) {
+        return false;
+    }
+    if (preg_match('/[^A-Za-z]/', $name)) {
+        return false;
+    }
+    return true;
+}

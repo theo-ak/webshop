@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     } else {
-        $_SESSION['login_err'] = 'Invalid credentials.';
+        $_SESSION['login_err'] = translate('Invalid credentials.');
     }
 }
 

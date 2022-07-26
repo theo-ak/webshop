@@ -27,5 +27,6 @@ define('TRANSLATIONS', [
     'View order' => 'Vizualizeaza comanda',
     'Products page' => 'Pagina produse',
     'Username' => 'Nume de utilizator',
-    'Password' => 'Parola'
+    'Password' => 'Parola',
+    'Invalid credentials.' => 'Date de autentificare incorecte.'
 ]);

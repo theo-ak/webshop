@@ -25,9 +25,11 @@ $details = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $details['name'] = isset($_POST['name']) ? testInput($_POST['name']) : '';
-    $details['contact'] = isset($_POST['contact']) ? testInput($_POST['contact']) : '';
-    $details['comments'] = isset($_POST['comments']) ? testInput($_POST['comments']) : '';
+    $details = [
+        'name' => $_POST['name'] ?? '',
+        'contact' => $_POST['contact'] ?? '',
+        'comments' => $_POST['comments'] ?? ''
+    ];
 
     if (isValid($details['name']) && $details['contact'] && $details['comments']) {
         $details['date'] = date('Y-m-d h:i:s');

@@ -9,12 +9,12 @@ if (isset($_POST['id'])) {
     array_splice($_SESSION['cart'], $index, 1);
 }
 
-$cart_str = implode(',', $_SESSION['cart']);
-
-if ($cart_str) {
-    $sql = "SELECT * FROM products WHERE id IN ($cart_str)";
+if ($_SESSION['cart']) {
+    $questionMarks = str_repeat('?,', count($_SESSION['cart']) - 1) . '?';
+    $sql   = "SELECT * FROM products WHERE id IN ($questionMarks)";
     $query = $connection->prepare($sql);
-    $query->execute();
+    $query->execute($_SESSION['cart']);
+
     $items = $query->fetchAll();
 }
 

@@ -6,15 +6,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
 
     if (!$id) {
-        http_response_code(400);
+        http_response_code(404);
         exit;
     }
 
-    if (selectByIds($connection, 'products', 'id', $id)->fetch()
-        && !in_array(
-            $id,
-            $_SESSION['cart']
-        )
+    if (selectByIds($connection, 'products', 'id', $id)->fetch() &&
+        !in_array($id, $_SESSION['cart'])
     ) {
         $_SESSION['cart'][] = $id;
     }

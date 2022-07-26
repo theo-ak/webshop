@@ -43,11 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $details['comments']
         ]);
 
-        $sql = 'SELECT id FROM orders WHERE date = :date';
+        $lastId = $connection->lastInsertId();
+
+        $sql = 'SELECT id FROM orders WHERE id = ?';
         $query = $connection->prepare($sql);
-        $query->execute([
-                'date' => $details['date']
-        ]);
+        $query->execute([$lastId]);
 
         $order_arr = $query->fetch();
         $order_id = $order_arr[0];

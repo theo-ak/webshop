@@ -33,25 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isValid($details['name']) && $details['contact'] && $details['comments']) {
         $details['date'] = date('Y-m-d h:i:s');
-        $item_ids = '';
 
-        foreach ($items as $item) {
-            if (in_array($item['id'], $_SESSION['cart'])) {
-                $item_ids = $item_ids . ' ' . $item['id'];
-            }
-        }
-
-        $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (:date, :name, :details, :comments)';
+        $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (?, ?, ?, ?)';
         $query = $connection->prepare($sql);
         $query->execute([
-            'date' => $details['date'],
-            'name' => $details['name'],
-            'details' => $details['contact'],
-            'comments' => $details['comments']
+            $details['date'],
+            $details['name'],
+            $details['contact'],
+            $details['comments']
         ]);
-
-        $items_arr = explode(' ', $item_ids);
-        $items_arr = array_filter($items_arr);
 
         $sql = 'SELECT id FROM orders WHERE date = :date';
         $query = $connection->prepare($sql);
@@ -62,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $order_arr = $query->fetch();
         $order_id = $order_arr[0];
 
-        foreach ($items_arr as $item) {
+        foreach ($_SESSION['cart'] as $item) {
             $sql = 'INSERT INTO order_items (order_id, product_id) VALUES (:order_id, :product_id)';
             $query = $connection->prepare($sql);
             $query->execute([

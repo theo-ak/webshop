@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (selectById($connection, 'products', 'id', $id)->fetch()
+    if (selectByIds($connection, 'products', 'id', $id)->fetch()
         && !in_array(
             $id,
             $_SESSION['cart']
@@ -24,21 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
-$cart_str = implode(
-    ',',
-    $_SESSION['cart']
-);
-
-if ($cart_str) {
-    $sql   = "SELECT * FROM products WHERE NOT FIND_IN_SET(id, :string)";
+if ($_SESSION['cart']) {
+    $questionMarks = str_repeat('?,', count($_SESSION['cart']) - 1) . '?';
+    $sql   = "SELECT * FROM products WHERE id NOT IN ($questionMarks)";
     $query = $connection->prepare($sql);
-    $query->execute([
-        'string' => $cart_str,
-    ]);
+    $query->execute($_SESSION['cart']);
 
     $items = $query->fetchAll();
 } else {
-    $items = selectAll($connection, 'products')->fetchAll();
+    $items = selectAll($connection, 'products');
 }
 
 require 'header.php';

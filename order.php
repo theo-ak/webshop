@@ -14,9 +14,9 @@ if (!$_SESSION['admin_logged_in']) {
 
 $id = $_GET['id'];
 
-$order = selectById($connection, 'orders', 'id', $id)->fetch();
+$order = selectByIds($connection, 'orders', 'id', $id)->fetch();
 
-$order_product_ids = selectById($connection, 'order_items', 'order_id', $id)->fetchAll();
+$order_product_ids = selectByIds($connection, 'order_items', 'order_id', $id)->fetchAll();
 $product_ids = array_map(function ($var) {
     return $var['product_id'];
 }, $order_product_ids);
@@ -25,7 +25,7 @@ $product_titles = [];
 $total = 0;
 
 foreach ($product_ids as $product_id) {
-    $product = selectById($connection, 'products', 'id', $product_id)->fetch();
+    $product = selectByIds($connection, 'products', 'id', $product_id)->fetch();
     $total += $product['price'];
     $product_titles[] = $product['title'];
 }

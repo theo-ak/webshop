@@ -15,7 +15,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 try {
     $connection = new PDO(
-        "mysql:host=" . SERVER . ";dbname=" . DBNAME,
+        'mysql:host=' . SERVER . ';dbname=' . DBNAME,
         USERNAME,
         PASSWORD
     );
@@ -39,16 +39,17 @@ function selectAll($connection, $table)
     $sql = "SELECT * FROM $table";
     $query = $connection->prepare($sql);
     $query->execute();
-    return $query;
+    return $query->fetchAll();
 }
 
-function selectById(
+function selectByIds(
     $connection,
     $table,
-    $id_from_table,
-    $id)
+    $idFromTable,
+    $id
+)
 {
-    $sql = "SELECT * FROM $table WHERE $id_from_table = :id";
+    $sql = "SELECT * FROM $table WHERE $idFromTable = :id";
     $query = $connection->prepare($sql);
     $query->execute([
         'id' => $id
@@ -66,7 +67,7 @@ function testInput($data)
 
 function isValid($name)
 {
-    if(!$name) {
+    if (!$name) {
         return false;
     }
     if (preg_match('/[^A-Za-z]/', $name)) {

@@ -13,7 +13,7 @@ $items = selectAll($connection, 'products');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = testInput($_POST['id']);
 
-    if ($id) {
+    if ($id && selectByIds()->fetch()) {
         $sql = 'DELETE FROM products WHERE id=:id';
         $query = $connection->prepare($sql);
         $query->execute([
@@ -53,26 +53,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     <tbody>
 
     <?php foreach ($items as $item): ?>
-        <tr>
-            <th scope="row"><?= $item['id']; ?></th>
-            <td><?= $item['title']; ?></td>
-            <td><?= $item['description']; ?></td>
-            <td><?= $item['price']; ?></td>
-            <td>
-                <div class="image"><img src="<?= $item['img']; ?>"></div>
-            </td>
-            <td>
-                <a href="product.php?id=<?= $item['id'] ?>">
-                    <button class="btn btn-primary mt-2"><?= translate('Edit'); ?></button>
-                </a>
+    <tr>
+        <th scope="row"><?= $item['id']; ?></th>
+        <td><?= $item['title']; ?></td>
+        <td><?= $item['description']; ?></td>
+        <td><?= $item['price']; ?></td>
+        <td>
+            <div class="image"><img src="<?= $item['img']; ?>"></div>
+        </td>
+        <td>
+            <a href="product.php?id=<?= $item['id'] ?>">
+                <button class="btn btn-primary mt-2"><?= translate('Edit'); ?></button>
+            </a>
 
-                <form method="post" action="<?php
-                echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <input type="hidden" name="id" value="<?= $item['id']; ?>">
-                    <input type="submit" value="<?= translate('Delete'); ?>" class="btn btn-primary mt-2">
-                </form>
-            </td>
-        </tr>
+            <form method="post" action="products.php">
+                <input type="hidden" name="id" value="<?= $item['id']; ?>">
+                <input type="submit" value="<?= translate('Delete'); ?>" class="btn btn-primary mt-2">
+            </form>
+        </td>
+    </tr>
     <?php endforeach; ?>
 
     </tbody>

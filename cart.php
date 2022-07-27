@@ -7,6 +7,8 @@ $items = [];
 if (isset($_POST['id'])) {
     $index = array_search($_POST['id'], $_SESSION['cart']);
     array_splice($_SESSION['cart'], $index, 1);
+    header('Location: cart.php');
+    exit;
 }
 
 if ($_SESSION['cart']) {

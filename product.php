@@ -34,30 +34,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = isset($_POST['price']) ? (float)testInput($_POST['price']) : "";
 
     if (isset($_FILES['fileToUpload'])) {
-        $target_dir = "img/";
-        $img = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+        $targetDir = 'img/';
+        $extension = pathinfo($_FILES['fileToUpload']['name'],PATHINFO_EXTENSION);
+        $_FILES['fileToUpload']['name'] = date('Y-m-d-H-i-s') . '_' . uniqid() . '.' . $extension;
+        $img = $targetDir . basename($_FILES["fileToUpload"]["name"]);
 
-        if (isset($_POST["submit"])) {
-            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-            if ($check !== false) {
-                echo "File is an image - " . $check["mime"] . ".";
-                $uploadOk = 1;
-            } else {
-                echo "File is not an image.";
-                $uploadOk = 0;
-            }
-        }
+        $fileType = mime_content_type($_FILES['fileToUpload']['tmp_name']);
 
-        if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded.";
-        } else {
-            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $img)) {
-                echo "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
-            } else {
-                echo "Sorry, there was an error uploading your file.";
-            }
+        if (str_contains($fileType, 'image')) {
+            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $img);
         }
     }
 
@@ -92,11 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<?php
-require 'header.php'; ?>
+<?php require 'header.php'; ?>
 
-<form method="post" id="details-form" action="<?php
-echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
+<form method="post" id="details-form" action="product.php" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title"><?= translate('Title'); ?></label>
         <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="<?= $title; ?>"
@@ -118,12 +101,10 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
         <input type="file" name="fileToUpload" id="fileToUpload" required>
         <input type="hidden" name="id" value="<?= $id ?>">
 
-        <?php
-        if (isset($image)): ?>
+        <?php if (isset($image)): ?>
             <p><?= translate('Current image') ?>:</p>
             <img src="<?= $image ?>" alt="no image">
-        <?php
-        endif; ?>
+        <?php endif; ?>
     </div>
 
     <div class="form-group">
@@ -135,6 +116,5 @@ echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
 
 </form>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>
 

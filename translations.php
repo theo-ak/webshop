@@ -28,5 +28,7 @@ define('TRANSLATIONS', [
     'Products page' => 'Pagina produse',
     'Username' => 'Nume de utilizator',
     'Password' => 'Parola',
-    'Invalid credentials.' => 'Date de autentificare incorecte.'
+    'Invalid credentials.' => 'Date de autentificare incorecte.',
+    'Please make sure to fill out all fields' => 'Va rugam completati toate campurile.',
+    'Checkout' => 'Trimite comanda'
 ]);

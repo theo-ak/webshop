@@ -88,6 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     }
+
+    $error = 'Please make sure to fill out all fields';
+
 }
 
 require 'header.php';
@@ -126,25 +129,27 @@ require 'header.php';
 
 </table>
 
-<form method="post" id="details-form"
-      action="cart.php">
+<form method="post" id="details-form" action="cart.php">
+    <?php if (isset($error)): ?>
+    <span><?= translate($error); ?></span>
+    <?php endif; ?>
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
-               value="<?= $_SESSION['details']['name'] ?>" required>
+               value="<?= $_SESSION['details']['name'] ?>">
         <span id="name_err"></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
-               value="<?= $_SESSION['details']['contact'] ?>" required>
+               value="<?= $_SESSION['details']['contact'] ?>">
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
                value="<?= $_SESSION['details']['comments'] ?>">
     </div>
-    <button type="submit" class="btn btn-primary" id="checkout-btn">Checkout</button>
+    <button type="submit" class="btn btn-primary" id="checkout-btn"><?= translate('Checkout'); ?></button>
 </form>
 
 <a href="index.php ">

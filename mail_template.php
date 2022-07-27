@@ -22,11 +22,11 @@ if ($_SESSION['cart']) {
 <p>Items ordered:</p>
 
 <?php foreach ($items as $item): ?>
-    <ul>
-        <li><?= $item['title'] ?></li>
-        <li><?= $item['description'] ?></li>
-        <li><?= $item['price'] ?></li>
-    </ul>
+<ul>
+    <li><?= $item['title'] ?></li>
+    <li><?= $item['description'] ?></li>
+    <li><?= $item['price'] ?></li>
+</ul>
 <?php endforeach; ?>
 
 </html>

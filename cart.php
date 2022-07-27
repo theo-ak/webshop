@@ -59,17 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query->execute([$lastId]);
 
         $order_arr = $query->fetch();
-        $order_id = $order_arr[0];
+        $orderId = $order_arr[0];
 
-        foreach ($_SESSION['cart'] as $item) {
-            $sql = 'INSERT INTO order_items (order_id, product_id) 
-                    VALUES (:order_id, :product_id)';
-            $query = $connection->prepare($sql);
-            $query->execute([
-                'order_id' => (int)$order_id,
-                'product_id' => (int)$item
-            ]);
+        $sql = 'INSERT INTO order_items (order_id, product_id) VALUES ';
+        foreach ($_SESSION['cart'] as $itemId) {
+            $sql .= '(' . $orderId . ',' . $itemId . '), ';
         }
+
+        $sql = substr($sql, 0, -2);
+        $query = $connection->prepare($sql);
+        $query->execute();
 
         $to = MANAGER;
 

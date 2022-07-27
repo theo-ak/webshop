@@ -7,26 +7,21 @@ if ($_SESSION['admin_logged_in']) {
     exit;
 }
 
-$_SESSION['login_err'] = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = isset($_POST['username']) ? testInput($_POST['username']) : '';
-    $password = isset($_POST['password']) ? testInput($_POST['password']) : '';
-
+    $username = testInput($_POST['username']) ?? '';
+    $password = testInput($_POST['password']) ?? '';
 
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
         $_SESSION['admin_logged_in'] = true;
 
-        if (isset($_SESSION['rdrurl'])) {
-            header('location: '.$_SESSION['rdrurl']);
-            exit;
-        }
-        else {
-            header('location: products.php');
-            exit;
-        }
+        header('Location: ' . $_SESSION['rdrurl'] ?? 'products.php');
+        exit;
+    } elseif (!$username || !$password) {
+        $error = translate('Please make sure to fill out all fields');
     } else {
-        $_SESSION['login_err'] = translate('Invalid credentials.');
+        $error = translate('Invalid credentials.');
     }
 }
 
@@ -34,18 +29,20 @@ require 'header.php';
 
 ?>
 
-    <form method="post" id="details-form" action="login.php">
-        <span><?= isset($_SESSION['login_err']) ? $_SESSION['login_err'] : ''; ?></span>
-        <div class="form-group">
-            <label for="username"><?= translate('Username') ?></label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-        </div>
-        <div class="form-group">
-            <label for="contact"><?= translate('Password') ?></label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password"required>
-        </div>
-        <button type="submit" class="btn btn-primary" id="login">Login</button>
-    </form>
+<form method="post" id="details-form" action="login.php">
+    <?php if ($error): ?>
+    <span><?= $error; ?></span>
+    <?php endif; ?>
+    <div class="form-group">
+        <label for="username"><?= translate('Username') ?></label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+    </div>
+    <div class="form-group">
+        <label for="contact"><?= translate('Password') ?></label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary" id="login"><?= translate('Login'); ?></button>
+</form>
 
 <?php require 'footer.php'; ?>
 

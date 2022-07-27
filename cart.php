@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = $connection->prepare($sql);
         $query->execute([$lastId]);
 
-        $order_arr = $query->fetch();
-        $orderId = $order_arr[0];
+        $orderArr = $query->fetch();
+        $orderId = $orderArr[0];
 
         $sql = 'INSERT INTO order_items (order_id, product_id) VALUES ';
         foreach ($_SESSION['cart'] as $itemId) {

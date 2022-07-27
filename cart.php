@@ -18,6 +18,8 @@ if ($_SESSION['cart']) {
     $query->execute($_SESSION['cart']);
 
     $items = $query->fetchAll();
+
+    $total = (array_sum(array_column($items, 'price')));
 }
 
 $_SESSION['details'] = [
@@ -39,14 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $_SESSION['details']['date'] = date('Y-m-d h:i:s');
 
-        $sql = 'INSERT INTO orders (date, name, details, comments) 
-                VALUES (?, ?, ?, ?)';
+        $sql = 'INSERT INTO orders (date, name, details, comments, total) 
+                VALUES (?, ?, ?, ?, ?)';
         $query = $connection->prepare($sql);
         $query->execute([
             $_SESSION['details']['date'],
             $_SESSION['details']['name'],
             $_SESSION['details']['contact'],
-            $_SESSION['details']['comments']
+            $_SESSION['details']['comments'],
+            $total
         ]);
 
         $lastId = $connection->lastInsertId();

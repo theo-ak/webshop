@@ -2,11 +2,11 @@
 
 require_once 'common.php';
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }
+
+$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
 
 $title = $description = $price = null;
 
@@ -28,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = isset($_POST['id']) ? testInput($_POST['id']) : "";
-    $title = isset($_POST['title']) ? testInput($_POST['title']) : "";
-    $description = isset($_POST['description']) ? testInput($_POST['description']) : "";
-    $price = isset($_POST['price']) ? (float)testInput($_POST['price']) : "";
+    $id = testInput($_POST['id']) ?? '';
+    $title = testInput($_POST['title']) ?? '';
+    $description = testInput($_POST['description']) ?? '';
+    $price = testInput($_POST['price']) ?? '';
 
     if (isset($_FILES['fileToUpload'])) {
         $targetDir = 'img/';
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             header("Location: product.php?id=$id");
+            exit;
         }
     } else {
         $sql = 'INSERT INTO products (title, description, price, img) VALUES (:title, :description, :price, :img)';
@@ -72,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         header('Location: products.php');
+        exit;
     }
 }
 
@@ -82,17 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="post" id="details-form" action="product.php" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title"><?= translate('Title'); ?></label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="<?= $title; ?>"
+        <input type="text" class="form-control" id="title" name="title" placeholder="<?= translate('Enter title'); ?>" value="<?= $title; ?>"
                required>
     </div>
     <div class="form-group">
         <label for="description"><?= translate('Description'); ?></label>
-        <input type="text" class="form-control" id="description" name="description" placeholder="Enter description"
+        <input type="text" class="form-control" id="description" name="description" placeholder="<?= translate('Enter description'); ?>"
                value="<?= $description; ?>" required>
     </div>
     <div class="form-group">
         <label for="price"><?= translate('Price'); ?></label>
-        <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="Enter price"
+        <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="<?= translate('Enter price'); ?>"
                value="<?= $price ?>" required>
     </div>
 

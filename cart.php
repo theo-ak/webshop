@@ -18,29 +18,33 @@ if ($_SESSION['cart']) {
     $items = $query->fetchAll();
 }
 
-$details = [
+$_SESSION['details'] = [
         'name' => '',
         'contact' => '',
         'comments' => ''
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $details = [
+    $_SESSION['details'] = [
         'name' => $_POST['name'] ?? '',
         'contact' => $_POST['contact'] ?? '',
         'comments' => $_POST['comments'] ?? ''
     ];
 
-    if (isValid($details['name']) && $details['contact'] && $details['comments']) {
-        $details['date'] = date('Y-m-d h:i:s');
+    if (isValid($_SESSION['details']['name']) &&
+        $_SESSION['details']['contact'] &&
+        $_SESSION['details']['comments']
+    ) {
+        $_SESSION['details']['date'] = date('Y-m-d h:i:s');
 
-        $sql = 'INSERT INTO orders (date, name, details, comments) VALUES (?, ?, ?, ?)';
+        $sql = 'INSERT INTO orders (date, name, details, comments) 
+                VALUES (?, ?, ?, ?)';
         $query = $connection->prepare($sql);
         $query->execute([
-            $details['date'],
-            $details['name'],
-            $details['contact'],
-            $details['comments']
+            $_SESSION['details']['date'],
+            $_SESSION['details']['name'],
+            $_SESSION['details']['contact'],
+            $_SESSION['details']['comments']
         ]);
 
         $lastId = $connection->lastInsertId();
@@ -53,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $order_id = $order_arr[0];
 
         foreach ($_SESSION['cart'] as $item) {
-            $sql = 'INSERT INTO order_items (order_id, product_id) VALUES (:order_id, :product_id)';
+            $sql = 'INSERT INTO order_items (order_id, product_id) 
+                    VALUES (:order_id, :product_id)';
             $query = $connection->prepare($sql);
             $query->execute([
                 'order_id' => (int)$order_id,
@@ -65,25 +70,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $subject = 'New Order';
 
-        $message = file_get_contents('html/mail_template.html');
-        $item_list = file_get_contents('html/items_list.html');
+        ob_start();
 
-        foreach ($details as $key => $value) {
-            $message = str_replace("{{ $key }}", $value, $message);
-        }
+        include 'mail_template.php';
+        $message = ob_get_clean();
 
-        foreach ($items as $item) {
-            $message = $message . str_replace(
-                    ["{{ title }}", "{{ description }}", "{{ price }}"],
-                    [$item['title'], $item['description'], $item['price']],
-                    $item_list
-                );
-        }
-
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-        $headers[] = 'From: <dummy_email@provider.eu>';
+        $headers = array(
+            'MIME-Version: 1.0',
+            'Content-type: text/html; charset=iso-8859-1',
+            'From: <dummy_email@provider.eu>'
+        );
 
         mail($to, $subject, $message, implode("\r\n", $headers));
 
@@ -92,9 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     }
-
-    header('Location: cart.php');
-    exit;
 }
 
 require 'header.php';
@@ -138,18 +131,18 @@ require 'header.php';
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
-               value="<?= $details['name'] ?>" required>
+               value="<?= $_SESSION['details']['name'] ?>" required>
         <span id="name_err"></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
-               value="<?= $details['contact'] ?>" required>
+               value="<?= $_SESSION['details']['contact'] ?>" required>
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
-               value="<?= $details['comments'] ?>">
+               value="<?= $_SESSION['details']['comments'] ?>">
     </div>
     <button type="submit" class="btn btn-primary" id="checkout-btn">Checkout</button>
 </form>

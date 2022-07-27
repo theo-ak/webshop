@@ -2,16 +2,16 @@
 
 require_once 'common.php';
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }
 
+$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
+
 $items = selectAll($connection, 'products');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $id = (int) testInput($_POST['id']);
+    $id = testInput($_POST['id']);
 
     if ($id) {
         $sql = 'DELETE FROM products WHERE id=:id';
@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         ]);
 
         header('Location: products.php');
+        exit;
     }
 }
 
 ?>
 
-<?php
-require 'header.php'; ?>
+<?php require 'header.php'; ?>
 
 <a href="product.php ">
     <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Add product'); ?></button>
@@ -52,8 +52,7 @@ require 'header.php'; ?>
     </thead>
     <tbody>
 
-    <?php
-    foreach ($items as $item): ?>
+    <?php foreach ($items as $item): ?>
         <tr>
             <th scope="row"><?= $item['id']; ?></th>
             <td><?= $item['title']; ?></td>
@@ -74,11 +73,9 @@ require 'header.php'; ?>
                 </form>
             </td>
         </tr>
-    <?php
-    endforeach; ?>
+    <?php endforeach; ?>
 
     </tbody>
 </table>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>

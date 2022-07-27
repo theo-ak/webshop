@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username == ADMIN && $password == ADMIN_PASSWORD) {
         $_SESSION['admin_logged_in'] = true;
 
-        header('Location: ' . $_SESSION['rdrurl'] ?? 'products.php');
+        $rdrurl = $_SESSION['rdrurl'] ?? 'products.php';
+        header('Location: ' . $rdrurl);
         exit;
     } elseif (!$username || !$password) {
         $error = translate('Please make sure to fill out all fields');

@@ -54,21 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $lastId = $connection->lastInsertId();
 
-        $sql = 'SELECT id FROM orders WHERE id = ?';
-        $query = $connection->prepare($sql);
-        $query->execute([$lastId]);
+        $sql = 'INSERT INTO order_items (order_id, product_id) VALUES (?, ?)';
 
-        $orderArr = $query->fetch();
-        $orderId = $orderArr[0];
-
-        $sql = 'INSERT INTO order_items (order_id, product_id) VALUES ';
         foreach ($_SESSION['cart'] as $itemId) {
-            $sql .= '(' . $orderId . ',' . $itemId . '), ';
+            $query = $connection->prepare($sql);
+            $query->execute([
+                $lastId,
+                $itemId
+            ]);
         }
-
-        $sql = substr($sql, 0, -2);
-        $query = $connection->prepare($sql);
-        $query->execute();
 
         ob_start();
 

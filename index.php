@@ -53,8 +53,8 @@ require 'header.php';
         <th scope="col"><?= translate('Price'); ?></th>
     </tr>
     </thead>
-    <tbody>
 
+    <tbody>
     <?php foreach ($items as $item): ?>
         <tr>
             <th scope="row"><?= $item['id']; ?></th>

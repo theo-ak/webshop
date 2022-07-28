@@ -32,7 +32,11 @@ define('TRANSLATIONS', [
     'Please make sure to fill out all fields' => 'Va rugam completati toate campurile.',
     'Checkout' => 'Trimite comanda',
     'Login' => 'Autentificare',
-    'Enter title' => 'Introdu un titlu',
-    'Enter description' => 'Introdu o descriere',
-    'Enter price' => 'Introdu un pret'
+    'Enter title' => 'Introduceti un titlu',
+    'Enter description' => 'Introduceti o descriere',
+    'Enter price' => 'Introduceti un pret',
+    'Enter name' => 'Introduceti un nume',
+    'Enter contact details' => 'Introduceti datele de contact',
+    'Enter comments' => 'Introduceti comentariile',
+    'Index' => 'Index'
 ]);

@@ -70,10 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = $connection->prepare($sql);
         $query->execute();
 
-        $to = MANAGER;
-
-        $subject = 'New Order';
-
         ob_start();
 
         include 'mail_template.php';
@@ -85,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'From: <dummy_email@provider.eu>'
         );
 
-        mail($to, $subject, $message, implode("\r\n", $headers));
+        mail(MANAGER, 'New Order', $message, implode("\r\n", $headers));
 
         $_SESSION['cart'] = [];
 
@@ -110,8 +106,8 @@ require 'header.php';
         <th scope="col"><?= translate('Price') ?></th>
     </tr>
     </thead>
-    <tbody>
 
+    <tbody>
     <?php foreach ($items as $item): ?>
         <tr>
             <th scope="row"><?= $item['id']; ?></th>
@@ -130,7 +126,6 @@ require 'header.php';
         </tr>
     <?php endforeach; ?>
     </tbody>
-
 </table>
 
 <form method="post" id="details-form" action="cart.php">
@@ -139,18 +134,18 @@ require 'header.php';
     <?php endif; ?>
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
+        <input type="text" class="form-control" id="name" name="name" placeholder="<?= translate('Enter name'); ?>"
                value="<?= $_SESSION['details']['name'] ?>">
         <span id="name_err"></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
-        <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact details"
+        <input type="text" class="form-control" id="contact" name="contact" placeholder="<?= translate('Enter contact details'); ?>"
                value="<?= $_SESSION['details']['contact'] ?>">
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>
-        <input type="text" class="form-control" id="comments" name="comments" placeholder="Enter comments"
+        <input type="text" class="form-control" id="comments" name="comments" placeholder="<?= translate('Enter comments'); ?>"
                value="<?= $_SESSION['details']['comments'] ?>">
     </div>
     <button type="submit" class="btn btn-primary" id="checkout-btn"><?= translate('Checkout'); ?></button>
@@ -174,4 +169,5 @@ require 'header.php';
         });
     });
 </script>
+
 <?php require 'footer.php'; ?>

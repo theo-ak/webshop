@@ -49,11 +49,9 @@ function selectById(
     $id
 )
 {
-    $sql = "SELECT * FROM $table WHERE $idFromTable = :id";
+    $sql = "SELECT * FROM $table WHERE $idFromTable = ?";
     $query = $connection->prepare($sql);
-    $query->execute([
-        'id' => $id
-    ]);
+    $query->execute([$id]);
 
     return $query->fetch();
 }

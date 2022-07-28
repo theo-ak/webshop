@@ -4,34 +4,22 @@ require_once 'common.php';
 
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
+    exit;
 }
 
 $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
 
-$title = $description = $price = null;
-
-$id = isset($_GET['id']) ? $_GET['id'] : '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id) {
-    $sql = 'SELECT * FROM products WHERE id=:id';
-    $query = $connection->prepare($sql);
-    $query->execute([
-        'id' => $id
-    ]);
-
-    $item = $query->fetch();
-
-    $title = $item['title'];
-    $description = $item['description'];
-    $price = $item['price'];
-    $image = $item['img'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['id']) {
+    $item = selectById($connection, 'products', 'id', $_GET['id']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = testInput($_POST['id']) ?? '';
-    $title = testInput($_POST['title']) ?? '';
-    $description = testInput($_POST['description']) ?? '';
-    $price = testInput($_POST['price']) ?? '';
+    $item = [
+        'id' => testInput($_POST['id']) ?? '',
+        'title' => testInput($_POST['title']) ?? '',
+        'description' => testInput($_POST['description']) ?? '',
+        'price' => testInput($_POST['price']) ?? '',
+    ];
 
     if (isset($_FILES['fileToUpload'])) {
         $targetDir = 'img/';
@@ -46,30 +34,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($id) {
-        if ($title && $description && $price && $img) {
-            $sql = 'UPDATE products SET title = :title, description = :description, price = :price, img = :img 
-                    WHERE id = :id';
+    if ($item['id']) {
+        if ($item['title'] && $item['description'] && $item['price'] && $img) {
+            $sql = 'UPDATE products SET title = ?, description = ?, price = ?, img = ? 
+                    WHERE id = ?';
             $query = $connection->prepare($sql);
             $query->execute([
-                'title' => $title,
-                'description' => $description,
-                'price' => $price,
-                'img' => $img,
-                'id' => $id
+                $item['title'],
+                $item['description'],
+                $item['price'],
+                $img,
+                $item['id']
             ]);
 
-            header("Location: product.php?id=$id");
+            header('Location: product.php?id=' . $item['id']);
             exit;
         }
     } else {
-        $sql = 'INSERT INTO products (title, description, price, img) VALUES (:title, :description, :price, :img)';
+        $sql = 'INSERT INTO products (title, description, price, img) VALUES (?, ?, ?, ?)';
         $query = $connection->prepare($sql);
         $query->execute([
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'img' => $img
+            $item['title'],
+            $item['description'],
+            $item['price'],
+            $img
         ]);
 
         header('Location: product.php?id=' . $connection->lastInsertId());
@@ -84,18 +72,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="post" id="details-form" action="product.php" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title"><?= translate('Title'); ?></label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="<?= translate('Enter title'); ?>" value="<?= $title; ?>"
+        <input type="text" class="form-control" id="title" name="title" placeholder="<?= translate('Enter title'); ?>" value="<?= $item['title']; ?>"
                required>
     </div>
     <div class="form-group">
         <label for="description"><?= translate('Description'); ?></label>
         <input type="text" class="form-control" id="description" name="description" placeholder="<?= translate('Enter description'); ?>"
-               value="<?= $description; ?>" required>
+               value="<?= $item['description']; ?>" required>
     </div>
     <div class="form-group">
         <label for="price"><?= translate('Price'); ?></label>
         <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="<?= translate('Enter price'); ?>"
-               value="<?= $price ?>" required>
+               value="<?= $item['price']; ?>" required>
     </div>
 
     <div class="form-group">
@@ -103,9 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="file" name="fileToUpload" id="fileToUpload" required>
         <input type="hidden" name="id" value="<?= $id ?>">
 
-        <?php if (isset($image)): ?>
+        <?php if (isset($item['img'])): ?>
             <p><?= translate('Current image') ?>:</p>
-            <img src="<?= $image ?>" alt="no image">
+            <img src="<?= $item['img'] ?>" alt="no image">
         <?php endif; ?>
     </div>
 

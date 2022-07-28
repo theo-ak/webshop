@@ -4,6 +4,7 @@ require_once 'common.php';
 
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
+    exit;
 }
 
 $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
@@ -13,7 +14,7 @@ $items = selectAll($connection, 'products');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = testInput($_POST['id']);
 
-    if ($id && selectById($connection, 'products', 'id', $id) {
+    if ($id && selectByIds($connection, 'products', 'id', $id)) {
         $sql = 'DELETE FROM products WHERE id = ?';
         $query = $connection->prepare($sql);
         $query->execute([$id]);

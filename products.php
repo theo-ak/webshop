@@ -13,12 +13,10 @@ $items = selectAll($connection, 'products');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = testInput($_POST['id']);
 
-    if ($id && selectByIds()->fetch()) {
-        $sql = 'DELETE FROM products WHERE id=:id';
+    if ($id && selectByIds($connection, 'products', 'id', $id)->fetch()) {
+        $sql = 'DELETE FROM products WHERE id= ?';
         $query = $connection->prepare($sql);
-        $query->execute([
-            'id' => $id
-        ]);
+        $query->execute([$id]);
 
         header('Location: products.php');
         exit;

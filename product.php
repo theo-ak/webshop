@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'img' => $img
         ]);
 
-        header('Location: products.php');
+        header('Location: product.php?id=' . $connection->lastInsertId());
         exit;
     }
 }

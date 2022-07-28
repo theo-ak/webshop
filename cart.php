@@ -123,6 +123,7 @@ require 'header.php';
 </table>
 
 <form method="post" id="details-form" action="cart.php">
+
     <?php if (isset($error)): ?>
     <span><?= translate($error); ?></span>
     <?php endif; ?>
@@ -143,6 +144,7 @@ require 'header.php';
                value="<?= $_SESSION['details']['comments'] ?>">
     </div>
     <button type="submit" class="btn btn-primary" id="checkout-btn"><?= translate('Checkout'); ?></button>
+
 </form>
 
 <a href="index.php ">

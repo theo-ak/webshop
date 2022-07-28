@@ -14,7 +14,7 @@ $items = selectAll($connection, 'products');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = testInput($_POST['id']);
 
-    if ($id && selectByIds($connection, 'products', 'id', $id)) {
+    if ($id && selectById($connection, 'products', 'id', $id)) {
         $sql = 'DELETE FROM products WHERE id = ?';
         $query = $connection->prepare($sql);
         $query->execute([$id]);

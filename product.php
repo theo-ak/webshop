@@ -21,21 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'price' => testInput($_POST['price']) ?? '',
     ];
 
-    if (isset($_FILES['fileToUpload'])) {
+    if ($_FILES['fileToUpload']['tmp_name']) {
         $targetDir = 'img/';
         $extension = pathinfo($_FILES['fileToUpload']['name'],PATHINFO_EXTENSION);
         $_FILES['fileToUpload']['name'] = date('Y-m-d-H-i-s') . '_' . uniqid() . '.' . $extension;
-        $img = $targetDir . basename($_FILES["fileToUpload"]["name"]);
+        $item['img'] = $targetDir . basename($_FILES["fileToUpload"]["name"]);
 
         $fileType = mime_content_type($_FILES['fileToUpload']['tmp_name']);
 
         if (str_contains($fileType, 'image')) {
-            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $img);
+            move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $item['img']);
         }
     }
 
-    if ($item['id']) {
-        if ($item['title'] && $item['description'] && $item['price'] && $img) {
+    if ($item['title'] && $item['description'] && $item['price'] && $item['img']) {
+        if ($item['id']) {
             $sql = 'UPDATE products SET title = ?, description = ?, price = ?, img = ? 
                     WHERE id = ?';
             $query = $connection->prepare($sql);
@@ -43,26 +43,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $item['title'],
                 $item['description'],
                 $item['price'],
-                $img,
+                $item['img'],
                 $item['id']
             ]);
 
             header('Location: product.php?id=' . $item['id']);
             exit;
-        }
-    } else {
-        $sql = 'INSERT INTO products (title, description, price, img) VALUES (?, ?, ?, ?)';
-        $query = $connection->prepare($sql);
-        $query->execute([
-            $item['title'],
-            $item['description'],
-            $item['price'],
-            $img
-        ]);
+        } else {
+            $sql = 'INSERT INTO products (title, description, price, img) VALUES (?, ?, ?, ?)';
+            $query = $connection->prepare($sql);
+            $query->execute([
+                $item['title'],
+                $item['description'],
+                $item['price'],
+                $item['img']
+            ]);
 
-        header('Location: product.php?id=' . $connection->lastInsertId());
-        exit;
+            header('Location: product.php?id=' . $connection->lastInsertId());
+            exit;
+        }
     }
+
+    $error = 'Please make sure to fill out all fields';
 }
 
 ?>
@@ -70,25 +72,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php require 'header.php'; ?>
 
 <form method="post" id="details-form" action="product.php" enctype="multipart/form-data">
+
+    <?php if (isset($error)): ?>
+    <span><?= $error; ?></span>
+    <?php endif; ?>
     <div class="form-group">
         <label for="title"><?= translate('Title'); ?></label>
         <input type="text" class="form-control" id="title" name="title" placeholder="<?= translate('Enter title'); ?>" value="<?= $item['title'] ?? ''; ?>"
-               required>
+        >
     </div>
     <div class="form-group">
         <label for="description"><?= translate('Description'); ?></label>
         <input type="text" class="form-control" id="description" name="description" placeholder="<?= translate('Enter description'); ?>"
-               value="<?= $item['description'] ?? ''; ?>" required>
+               value="<?= $item['description'] ?? ''; ?>">
     </div>
     <div class="form-group">
         <label for="price"><?= translate('Price'); ?></label>
         <input type="number" step=".01" class="form-control" id="price" name="price" placeholder="<?= translate('Enter price'); ?>"
-               value="<?= $item['price'] ?? ''; ?>" required>
+               value="<?= $item['price'] ?? ''; ?>">
     </div>
 
     <div class="form-group">
         <?= translate('Select image to upload'); ?>:
-        <input type="file" name="fileToUpload" id="fileToUpload" required>
+        <input type="file" name="fileToUpload" id="fileToUpload">
         <input type="hidden" name="id" value="<?= $_GET['id'] ?? ''; ?>">
 
         <?php if (isset($item['img'])): ?>

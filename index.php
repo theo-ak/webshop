@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (selectByIds($connection, 'products', 'id', $id)->fetch() &&
+    if (selectById($connection, 'products', 'id', $id) &&
         !in_array($id, $_SESSION['cart'])
     ) {
         $_SESSION['cart'][] = $id;

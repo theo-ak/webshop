@@ -2,38 +2,38 @@
 
 require_once 'common.php';
 
-if (!isset($_GET['id'])) {
-    header('location: ' . $_SESSION['rdrurl']);
+if (!$_SESSION['admin_logged_in']) {
+    header('Location: login.php');
+    exit;
 }
 
 $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
 
-if (!$_SESSION['admin_logged_in']) {
-    header('Location: login.php');
+if (!isset($_GET['id'])) {
+    header('location: ' . $_SESSION['rdrurl']);
+    exit;
 }
 
-$id = $_GET['id'];
+$order = selectById($connection, 'orders', 'id', $_GET['id']);
 
-$order = selectByIds($connection, 'orders', 'id', $id)->fetch();
-
-$order_product_ids = selectByIds($connection, 'order_items', 'order_id', $id)->fetchAll();
-$product_ids = array_map(function ($var) {
-    return $var['product_id'];
-}, $order_product_ids);
-
-$product_titles = [];
-$total = 0;
-
-foreach ($product_ids as $product_id) {
-    $product = selectByIds($connection, 'products', 'id', $product_id)->fetch();
-    $total += $product['price'];
-    $product_titles[] = $product['title'];
+if (!$order) {
+    http_response_code(404);
+    exit;
 }
+
+$sql = 'SELECT products.id, products.title, order_items.order_id 
+    FROM products 
+    INNER JOIN order_items 
+    ON products.id = order_items.product_id 
+    WHERE order_id = ?';
+$query = $connection->prepare($sql);
+$query->execute([$order['id']]);
+
+$orderProducts = $query->fetchAll();
+
+require 'header.php';
 
 ?>
-
-<?php
-require 'header.php'; ?>
 
 <table class="table">
     <thead>
@@ -47,19 +47,18 @@ require 'header.php'; ?>
         <th scope="col"><?= translate('Comments'); ?></th>
     </tr>
     </thead>
+
     <tbody>
     <th scope="row"><?= $order['id']; ?></th>
     <td><?= $order['date']; ?></td>
     <td><?= $order['name']; ?></td>
     <td><?= $order['details']; ?></td>
     <td>
-        <?php
-        foreach ($product_titles as $product_title): ?>
-            <?= $product_title ?>
-        <?php
-        endforeach; ?>
+        <?php foreach ($orderProducts as $orderProduct): ?>
+            <p><?= $orderProduct['title'] ?></p>
+        <?php endforeach; ?>
     </td>
-    <td><?= $total; ?></td>
+    <td><?= $order['total']; ?></td>
     <td><?= $order['comments']; ?></td>
     </tbody>
 </table>
@@ -76,5 +75,4 @@ require 'header.php'; ?>
     <button type="button" class="btn btn-primary mx-2"><?= translate('Index page'); ?></button>
 </a>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>

@@ -42,7 +42,7 @@ function selectAll($connection, $table)
     return $query->fetchAll();
 }
 
-function selectByIds(
+function selectById(
     $connection,
     $table,
     $idFromTable,
@@ -55,7 +55,7 @@ function selectByIds(
         'id' => $id
     ]);
 
-    return $query;
+    return $query->fetch();
 }
 
 function testInput($data)

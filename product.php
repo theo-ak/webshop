@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $error = 'Please make sure to fill out all fields';
+    $error = translate('Please make sure to fill out all fields');
 }
 
 ?>

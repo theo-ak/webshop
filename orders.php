@@ -2,20 +2,27 @@
 
 require_once 'common.php';
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
 if (!$_SESSION['admin_logged_in']) {
     header('Location: login.php');
 }
 
-$items = selectAll($connection, 'products');
+
+$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
+
 $orders = selectAll($connection, 'orders');
-$order_items = selectAll($connection, 'order_items');
+
+$sql = 'SELECT products.id, products.title, order_items.order_id 
+        FROM products 
+        INNER JOIN order_items 
+        ON products.id = order_items.product_id';
+$query = $connection->prepare($sql);
+$query->execute();
+
+$titles = $query->fetchAll();
 
 ?>
 
-<?php
-require 'header.php'; ?>
+<?php require 'header.php'; ?>
 
 <a href="products.php">
     <button type="button" class="btn btn-primary mx-2 my-2"><?= translate('Products page') ?></button>
@@ -37,50 +44,31 @@ require 'header.php'; ?>
         <th scope="col"><?= translate('Comments'); ?></th>
     </tr>
     </thead>
-    <tbody>
 
-    <?php
-    foreach ($orders as $order): ?>
+    <tbody>
+    <?php foreach ($orders as $order): ?>
         <tr>
             <th scope="row"><?= $order['id']; ?></th>
             <td><?= $order['date']; ?></td>
             <td><?= $order['name']; ?></td>
             <td><?= $order['details']; ?></td>
-            <?php
-
-            $order_ids = array_filter($order_items, function ($var) use ($order) {
-                return $var['order_id'] == $order['id'];
-            });
-
-            $title_ids = array_map(function ($var) {
-                return $var['product_id'];
-            }, $order_ids);
-
-            $titles = '';
-            $total = 0;
-
-            foreach ($title_ids as $title_id) {
-                foreach ($items as $item) {
-                    if ($item['id'] == $title_id) {
-                        $titles = $titles . $item['title'] . '<br>';
-                        $total += $item['price'];
-                    }
-                }
-            }
-
-            ?>
-
-            <td><?= $titles; ?></td>
-            <td><?= $total; ?></td>
+            <td>
+                <?php foreach ($titles as $title): ?>
+                <?php if ($title['order_id'] == $order['id']): ?>
+                    <p><?= $title['title'] ?></p>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </td>
+            <td><?= $order['total']; ?></td>
             <td><?= $order['comments']; ?></td>
-            <td><a href="order.php?id=<?= $order['id']; ?>">
+            <td>
+                <a href="order.php?id=<?= $order['id']; ?>">
                     <button type="button" class="btn btn-primary"><?= translate('View order'); ?></button>
-                </a></td>
+                </a>
+            </td>
         </tr>
-    <?php
-    endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 
-<?php
-require 'footer.php'; ?>
+<?php require 'footer.php'; ?>

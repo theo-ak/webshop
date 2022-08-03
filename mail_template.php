@@ -15,9 +15,9 @@ if ($_SESSION['cart']) {
 
 <html lang="en">
 
-<p>Name: <?= $_SESSION['details']['name'] ?></p>
-<p>Contact: <?= $_SESSION['details']['contact'] ?></p>
-<p>Comments: <?= $_SESSION['details']['comments'] ?></p>
+<p>Name: <?= $details['name'] ?></p>
+<p>Contact: <?= $details['contact'] ?></p>
+<p>Comments: <?= $details['comments'] ?></p>
 
 <p>Items ordered:</p>
 

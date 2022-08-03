@@ -22,33 +22,33 @@ if ($_SESSION['cart']) {
     $total = (array_sum(array_column($items, 'price')));
 }
 
-$_SESSION['details'] = [
-        'name' => '',
-        'contact' => '',
-        'comments' => ''
+$details = [
+    'name' => '',
+    'contact' => '',
+    'comments' => ''
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['details'] = [
+    $details = [
         'name' => $_POST['name'] ?? '',
         'contact' => $_POST['contact'] ?? '',
         'comments' => $_POST['comments'] ?? ''
     ];
 
-    if (isValid($_SESSION['details']['name']) &&
-        $_SESSION['details']['contact'] &&
-        $_SESSION['details']['comments']
+    if (isValid($details['name']) &&
+        $details['contact'] &&
+        $details['comments']
     ) {
-        $_SESSION['details']['date'] = date('Y-m-d h:i:s');
+        $details['date'] = date('Y-m-d h:i:s');
 
         $sql = 'INSERT INTO orders (date, name, details, comments, total) 
                 VALUES (?, ?, ?, ?, ?)';
         $query = $connection->prepare($sql);
         $query->execute([
-            $_SESSION['details']['date'],
-            $_SESSION['details']['name'],
-            $_SESSION['details']['contact'],
-            $_SESSION['details']['comments'],
+            $details['date'],
+            $details['name'],
+            $details['contact'],
+            $details['comments'],
             $total
         ]);
 
@@ -130,18 +130,18 @@ require 'header.php';
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="<?= translate('Enter name'); ?>"
-               value="<?= $_SESSION['details']['name'] ?>">
+               value="<?= $details['name'] ?>">
         <span id="name_err"></span>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="<?= translate('Enter contact details'); ?>"
-               value="<?= $_SESSION['details']['contact'] ?>">
+               value="<?= $details['contact'] ?>">
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>
         <input type="text" class="form-control" id="comments" name="comments" placeholder="<?= translate('Enter comments'); ?>"
-               value="<?= $_SESSION['details']['comments'] ?>">
+               value="<?= $details['comments'] ?>">
     </div>
     <button type="submit" class="btn btn-primary" id="checkout-btn"><?= translate('Checkout'); ?></button>
 

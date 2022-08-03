@@ -40,7 +40,11 @@ define('TRANSLATIONS', [
     'Enter comments' => 'Introduceti comentariile',
     'Index' => 'Index',
     'New order' => 'Comanda noua',
-    'Name should not be empty' => 'Numele trebuie completat',
-    'Contact should not be empty' => 'Datele de contact trebuiesc completate',
-    'Items ordered' => 'Produse comandate'
+    'Name should not be empty' => 'Numele este obligatoriu',
+    'Contact should not be empty' => 'Datele de contact sunt obligatorii',
+    'Items ordered' => 'Produse comandate',
+    'Title should not be empty' => 'Titlul este obligatoriu',
+    'Description should not be empty' => 'Descrierea este obligatorie',
+    'Price should not be empty' => 'Pretul este obligatoriu',
+    'Invalid file type' => 'Fisier invalid'
 ]);

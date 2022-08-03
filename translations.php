@@ -38,5 +38,9 @@ define('TRANSLATIONS', [
     'Enter name' => 'Introduceti un nume',
     'Enter contact details' => 'Introduceti datele de contact',
     'Enter comments' => 'Introduceti comentariile',
-    'Index' => 'Index'
+    'Index' => 'Index',
+    'New order' => 'Comanda noua',
+    'Name should not be empty' => 'Numele trebuie completat',
+    'Contact should not be empty' => 'Datele de contact trebuiesc completate',
+    'Items ordered' => 'Produse comandate'
 ]);

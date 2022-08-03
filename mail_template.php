@@ -15,11 +15,11 @@ if ($_SESSION['cart']) {
 
 <html lang="en">
 
-<p>Name: <?= $details['name'] ?></p>
-<p>Contact: <?= $details['contact'] ?></p>
-<p>Comments: <?= $details['comments'] ?></p>
+<p><?= translate('Name') ?>: <?= $details['name'] ?></p>
+<p><?= translate('Contact') ?>: <?= $details['contact'] ?></p>
+<p><?= translate('Comments') ?>: <?= $details['comments'] ?></p>
 
-<p>Items ordered:</p>
+<p><?= translate('Items ordered') ?>:</p>
 
 <?php foreach ($items as $item): ?>
 <ul>

@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     if (isValid($details['name']) &&
-        $details['contact'] &&
-        $details['comments']
+        $details['contact']
     ) {
         $details['date'] = date('Y-m-d h:i:s');
 
@@ -69,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         include 'mail_template.php';
         $message = ob_get_clean();
 
-        $headers = array(
+        $headers = [
             'MIME-Version: 1.0',
             'Content-type: text/html; charset=iso-8859-1',
             'From: <dummy_email@provider.eu>'
-        );
+        ];
 
-        mail(MANAGER, 'New Order', $message, implode("\r\n", $headers));
+        mail(MANAGER, translate('New order'), $message, implode("\r\n", $headers));
 
         $_SESSION['cart'] = [];
 
@@ -83,7 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $error = 'Please make sure to fill out all fields';
+    $errors = [
+        'name' => isset($details['name']) ?
+            translate('Name should not be empty') :
+            '',
+        'contact' => isset($details['contact']) ?
+            translate('Contact should not be empty') :
+            ''
+    ];
 
 }
 
@@ -123,20 +129,24 @@ require 'header.php';
 </table>
 
 <form method="post" id="details-form" action="cart.php">
-
-    <?php if (isset($error)): ?>
-    <span><?= translate($error); ?></span>
-    <?php endif; ?>
     <div class="form-group">
         <label for="name"><?= translate('Name'); ?></label>
         <input type="text" class="form-control" id="name" name="name" placeholder="<?= translate('Enter name'); ?>"
                value="<?= $details['name'] ?>">
         <span id="name_err"></span>
+
+        <?php if (isset($errors['name'])): ?>
+        <span><?= $errors['name']; ?></span>
+        <?php endif; ?>
     </div>
     <div class="form-group">
         <label for="contact"><?= translate('Contact details'); ?></label>
         <input type="text" class="form-control" id="contact" name="contact" placeholder="<?= translate('Enter contact details'); ?>"
                value="<?= $details['contact'] ?>">
+
+        <?php if (isset($errors['contact'])): ?>
+            <span><?= $errors['contact']; ?></span>
+        <?php endif; ?>
     </div>
     <div class="form-group">
         <label for="comments"><?= translate('Comments'); ?></label>

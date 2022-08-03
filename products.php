@@ -3,13 +3,14 @@
 require_once 'common.php';
 
 if (!$_SESSION['admin_logged_in']) {
+    $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
     header('Location: login.php');
     exit;
 }
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
-$items = selectAll($connection, 'products');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $items = selectAll($connection, 'products');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = testInput($_POST['id']);

@@ -3,22 +3,12 @@
 require_once 'common.php';
 
 if (!$_SESSION['admin_logged_in']) {
+    $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
     header('Location: login.php');
     exit;
 }
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
 $orders = selectAll($connection, 'orders');
-
-$sql = 'SELECT products.id, products.title, order_items.order_id 
-        FROM products 
-        INNER JOIN order_items 
-        ON products.id = order_items.product_id';
-$query = $connection->prepare($sql);
-$query->execute();
-
-$titles = $query->fetchAll();
 
 ?>
 
@@ -39,7 +29,6 @@ $titles = $query->fetchAll();
         <th scope="col"><?= translate('Date'); ?></th>
         <th scope="col"><?= translate('Name'); ?></th>
         <th scope="col"><?= translate('Contact details') ?></th>
-        <th scope="col"><?= translate('Items'); ?></th>
         <th scope="col"><?= translate('Total'); ?></th>
         <th scope="col"><?= translate('Comments'); ?></th>
     </tr>
@@ -52,13 +41,6 @@ $titles = $query->fetchAll();
             <td><?= $order['date']; ?></td>
             <td><?= $order['name']; ?></td>
             <td><?= $order['details']; ?></td>
-            <td>
-                <?php foreach ($titles as $title): ?>
-                <?php if ($title['order_id'] == $order['id']): ?>
-                    <p><?= $title['title'] ?></p>
-                <?php endif; ?>
-                <?php endforeach; ?>
-            </td>
             <td><?= $order['total']; ?></td>
             <td><?= $order['comments']; ?></td>
             <td>

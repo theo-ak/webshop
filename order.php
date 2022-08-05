@@ -3,14 +3,13 @@
 require_once 'common.php';
 
 if (!$_SESSION['admin_logged_in']) {
+    $_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
     header('Location: login.php');
     exit;
 }
 
-$_SESSION['rdrurl'] = $_SERVER['REQUEST_URI'];
-
 if (!isset($_GET['id'])) {
-    header('location: ' . $_SESSION['rdrurl']);
+    header('Location: ' . $_SESSION['rdrurl']);
     exit;
 }
 
@@ -21,7 +20,7 @@ if (!$order) {
     exit;
 }
 
-$sql = 'SELECT products.id, products.title, order_items.order_id 
+$sql = 'SELECT products.id, products.title, order_items.order_id, order_items.product_price
     FROM products 
     INNER JOIN order_items 
     ON products.id = order_items.product_id 
@@ -55,7 +54,11 @@ require 'header.php';
     <td><?= $order['details']; ?></td>
     <td>
         <?php foreach ($orderProducts as $orderProduct): ?>
-            <p><?= $orderProduct['title'] ?></p>
+            <p>
+                <?= $orderProduct['title'] .
+                ' - ' .
+                $orderProduct['product_price']; ?>
+            </p>
         <?php endforeach; ?>
     </td>
     <td><?= $order['total']; ?></td>

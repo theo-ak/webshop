@@ -19,7 +19,11 @@ if ($_SESSION['cart']) {
 
     $items = $query->fetchAll();
 
-    $total = (array_sum(array_column($items, 'price')));
+    $prices = array_column($items, 'price');
+
+    var_dump(array_combine($_SESSION['cart'], $prices));
+
+    $total = (array_sum($prices));
 }
 
 $details = [
@@ -53,13 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $lastId = $connection->lastInsertId();
 
-        $sql = 'INSERT INTO order_items (order_id, product_id) VALUES (?, ?)';
+        $sql = 'INSERT INTO order_items (order_id, product_id, product_price) VALUES (?, ?, ?)';
 
-        foreach ($_SESSION['cart'] as $itemId) {
+        foreach (array_combine($_SESSION['cart'], $prices) as $id => $price) {
             $query = $connection->prepare($sql);
             $query->execute([
                 $lastId,
-                $itemId
+                $id,
+                $price
             ]);
         }
 
